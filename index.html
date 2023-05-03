@@ -57,5 +57,4035 @@
         </ul>
         </div>
         
-    </body>
+        <canvas id="mycanvas"></canvas> 
+  </body>
+ 
+  <!-- Include the processing.js library -->
+  <!-- See https://khanacademy.zendesk.com/hc/en-us/articles/202260404-What-parts-of-ProcessingJS-does-Khan-Academy-support- for differences -->
+  <script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script> 
+  <script>
+  var programCode = function(processingInstance) {
+    with (processingInstance) {
+      size(400, 400); 
+      frameRate(30);
+        
+      // Paste code from Khan Academy here:
+      //This is a game inspired by worldle made for bible verses instead of locations
+//Biblele (Bible-ul,bye-bull-ul)
+
+
+//These vars are for guessing{
+var book = 0;
+var chapter =0;
+var verse = 0;
+
+//these two are to actualy make use of the pound sign
+var chapterG=0;
+var verseG=0;
+//}
+
+//The r is for real while the ones without r will be the guess{
+var rbook = 0;
+var rchapter =0;
+var rverse = 0;
+//}
+//Placeholders vars for the keypads{
+var chapterNumPlace = 1;
+var verseNumPlace = 1;
+var chapterOpened = false;
+var verseOpened = false;
+//}
+//Vars if you win! {
+var win=false;
+var winTime = 0;
+//}
+//Vars if you lose :({
+var lose = false;
+var loseTime = 0;
+//}
+//Vars for if you make a really bad guess{
+    var warnTime = 0;
+    var warnActive = false;
+//}
+
+
+//These screens are for picking the book chapter and verse and help{
+var bookScreen = false;
+var verseScreen = false;
+var chapterScreen = false;
+var helpScreen = false;
+//}
+
+//Functions for buttons{
+var button = function(config){
+    this.x = config.x;
+    this.y = config.y;
+    this.width = config.width || 150;
+    this.height = config.height || 100;
+    this.label = config.label;
+};
+button.prototype.isMouseInside = function(){
+    return mouseX > this.x &&
+        mouseX < (this.x + this.width) &&
+        mouseY > this.y &&
+        mouseY < (this.y + this.height);
+};
+//}
+
+//Buttons for the four main choices and help{
+var btnBook = new button({x:5,y:315,width:190,height:50});
+var btnChapter = new button({x:197.5,y:315,width:50,height:50});
+var btnVerse = new button({x:257.5,y:315,width:50,height:50});
+var btnSubmit = new button({x:315,y:315,width:80,height:50});
+var btnHelp = new button({x:25,y:25,width:50,height:50});
+//}
+
+//Screens{
+var btnBookScreen = new button({x:25,y:25,width:350,height:350});
+var btnChapterScreen = new button({x:25,y:25,width:350,height:350});
+var btnVerseScreen = new button({x:25,y:25,width:350,height:350});
+
+//}
+
+//Buttons for BookScreen{
+var btnb1 = new button({x:50,y:35,width:100,height:15});
+var btnb2 = new button({x:50,y:35+15,width:100,height:15});
+var btnb3 = new button({x:50,y:35+15*2,width:100,height:15});
+var btnb4 = new button({x:50,y:35+15*3,width:100,height:15});
+var btnb5 = new button({x:50,y:35+15*4,width:100,height:15});
+var btnb6 = new button({x:50,y:35+15*5,width:100,height:15});
+var btnb7 = new button({x:50,y:35+15*6,width:100,height:15});
+var btnb8 = new button({x:50,y:35+15*7,width:100,height:15});
+var btnb9 = new button({x:50,y:35+15*8,width:100,height:15});
+var btnb10 = new button({x:50,y:35+15*9,width:100,height:15});
+var btnb11 = new button({x:50,y:35+15*10,width:100,height:15});
+var btnb12 = new button({x:50,y:35+15*11,width:100,height:15});
+var btnb13 = new button({x:50,y:35+15*12,width:100,height:15});
+var btnb14 = new button({x:50,y:35+15*13,width:100,height:15});
+var btnb15 = new button({x:50,y:35+15*14,width:100,height:15});
+var btnb16 = new button({x:50,y:35+15*15,width:100,height:15});
+var btnb17 = new button({x:50,y:35+15*16,width:100,height:15});
+var btnb18 = new button({x:50,y:35+15*17,width:100,height:15});
+var btnb19 = new button({x:50,y:35+15*18,width:100,height:15});
+var btnb20 = new button({x:50,y:35+15*19,width:100,height:15});
+var btnb21 = new button({x:50,y:35+15*20,width:100,height:15});
+var btnb22 = new button({x:50,y:35+15*21,width:100,height:15});
+var btnb23 = new button({x:150,y:35,width:100,height:15});
+var btnb24 = new button({x:150,y:35+15*1,width:100,height:15});
+var btnb25 = new button({x:150,y:35+15*2,width:100,height:15});
+var btnb26 = new button({x:150,y:35+15*3,width:100,height:15});
+var btnb27 = new button({x:150,y:35+15*4,width:100,height:15});
+var btnb28 = new button({x:150,y:35+15*5,width:100,height:15});
+var btnb29 = new button({x:150,y:35+15*6,width:100,height:15});
+var btnb30 = new button({x:150,y:35+15*7,width:100,height:15});
+var btnb31 = new button({x:150,y:35+15*8,width:100,height:15});
+var btnb32 = new button({x:150,y:35+15*9,width:100,height:15});
+var btnb33 = new button({x:150,y:35+15*10,width:100,height:15});
+var btnb34 = new button({x:150,y:35+15*11,width:100,height:15});
+var btnb35 = new button({x:150,y:35+15*12,width:100,height:15});
+var btnb36 = new button({x:150,y:35+15*13,width:100,height:15});
+var btnb37 = new button({x:150,y:35+15*14,width:100,height:15});
+var btnb38 = new button({x:150,y:35+15*15,width:100,height:15});
+var btnb39 = new button({x:150,y:35+15*16,width:100,height:15});
+var btnb40 = new button({x:150,y:35+15*17,width:100,height:15});
+var btnb41 = new button({x:150,y:35+15*18,width:100,height:15});
+var btnb42 = new button({x:150,y:35+15*19,width:100,height:15});
+var btnb43 = new button({x:150,y:35+15*20,width:100,height:15});
+var btnb44 = new button({x:150,y:35+15*21,width:100,height:15});
+var btnb45 = new button({x:250,y:35,width:100,height:15});
+var btnb46 = new button({x:250,y:35+15,width:100,height:15});
+var btnb47 = new button({x:250,y:35+15*2,width:100,height:15});
+var btnb48 = new button({x:250,y:35+15*3,width:100,height:15});
+var btnb49 = new button({x:250,y:35+15*4,width:100,height:15});
+var btnb50 = new button({x:250,y:35+15*5,width:100,height:15});
+var btnb51 = new button({x:250,y:35+15*6,width:100,height:15});
+var btnb52 = new button({x:250,y:35+15*7,width:100,height:15});
+var btnb53 = new button({x:250,y:35+15*8,width:100,height:15});
+var btnb54 = new button({x:250,y:35+15*9,width:100,height:15});
+var btnb55 = new button({x:250,y:35+15*10,width:100,height:15});
+var btnb56 = new button({x:250,y:35+15*11,width:100,height:15});
+var btnb57 = new button({x:250,y:35+15*12,width:100,height:15});
+var btnb58 = new button({x:250,y:35+15*13,width:100,height:15});
+var btnb59 = new button({x:250,y:35+15*14,width:100,height:15});
+var btnb60 = new button({x:250,y:35+15*15,width:100,height:15});
+var btnb61 = new button({x:250,y:35+15*16,width:100,height:15});
+var btnb62 = new button({x:250,y:35+15*17,width:100,height:15});
+var btnb63 = new button({x:250,y:35+15*18,width:100,height:15});
+var btnb64 = new button({x:250,y:35+15*19,width:100,height:15});
+var btnb65 = new button({x:250,y:35+15*20,width:100,height:15});
+var btnb66 = new button({x:250,y:35+15*21,width:100,height:15});
+//}
+
+//Buttons for the keypad for chapterScreen{
+var key1 = new button({x:75,y:30,width:75,height:75});
+var key2 = new button({x:162.5,y:30,width:75,height:75});
+var key3 = new button({x:250,y:30,width:75,height:75});
+
+var key4 = new button({x:75,y:117.5,width:75,height:75});
+var key5 = new button({x:162.5,y:117.5,width:75,height:75});
+var key6 = new button({x:250,y:117.5,width:75,height:75});
+
+var key7 = new button({x:75,y:205,width:75,height:75});
+var key8 = new button({x:162.5,y:205,width:75,height:75});
+var key9 = new button({x:250,y:205,width:75,height:75});
+
+var key10 = new button({x:75,y:292.5,width:75,height:75});
+var key11 = new button({x:162.5,y:292.5,width:75,height:75});
+var key12 = new button({x:250,y:292.5,width:75,height:75});
+//}
+
+var btnPlayAgain = new button({x:115,y:318,width:165,height:50});
+var btnTryAgain = new button({x:115,y:200,width:165,height:50});
+
+//Vars for info when you guess{
+    var guess = 0;
+    
+    //guess 1 vars{ 
+    var vG1 = 0;
+    var vG1N = 0;
+    var tvG1W = -70;
+
+    var cG1 = 0;
+    var cG1N = 0;
+    var tcG1W = -70;
+    
+    var bG1 = 0;
+    var bG1N = 0;
+    var tbG1W = -70;
+    //}
+    
+    //guess 2 vars{
+    var vG2 = 0;
+    var vG2N = 0;
+    var tvG2W = -70;
+
+    var cG2 = 0;
+    var cG2N = 0;
+    var tcG2W = -70;
+    
+    var bG2 = 0;
+    var bG2N = 0;
+    var tbG2W = -70;
+    //}
+    
+    //guess 3 vars{
+    var vG3 = 0;
+    var vG3N = 0;
+    var tvG3W = -70;
+
+    var cG3 = 0;
+    var cG3N = 0;
+    var tcG3W = -70;
+    
+    var bG3 = 0;
+    var bG3N = 0;
+    var tbG3W = -70;
+    //}
+    
+    //guess 4 vars{
+    var vG4 = 0;
+    var vG4N = 0;
+    
+    var cG4 = 0;
+    var cG4N = 0;
+    
+    var bG4 = 0;
+    var bG4N = 0;
+    //}
+    
+    //guess 5 vars{
+    var vG5 = 0;
+    var vG5N = 0;
+    var tvG5W = -70;
+    
+    var cG5 = 0;
+    var cG5N = 0;
+    var tcG5W = -70;
+    
+    var bG5 = 0;
+    var bG5N = 0;
+    var tbG5W = -70;
+    //}
+    
+    //guess 6 vars{
+    var vG6 = 0;
+    var vG6N = 0;
+    var tvG6W = -70;
+    
+    var cG6 = 0;
+    var cG6N = 0;
+    var tcG6W = -70;
+    
+    var bG6 = 0;
+    var bG6N = 0;
+    var tbG6W = -70;
+    //}
+    
+    //guess 7 vars{
+    var vG7 = 0;
+    var vG7N = 0;
+    var tvG7W = -70;
+    
+    var cG7 = 0;
+    var cG7N = 0;
+    var tcG7W = -70;
+    
+    var bG7 = 0;
+    var bG7N = 0;
+    var tbG7W = -70;
+    //}
+//}
+
+//Vars for the possible verses{
+/*
+    List of books and numbers for reference
+    //-Old Testament 1-39{
+        Genesis 1
+        Exodus 2
+        Leviticus 3
+        Numbers 4
+        Deuteronomy 5 
+        Joshua 6
+        Judges 7
+        Ruth 8
+        1 Samuel 9 
+        2 Samuel 10
+        1 Kings 11
+        2 Kings 12
+        1 Chronicles 13 
+        2 Chronicles 14
+        Ezra 15
+        Nehemiah 16 
+        Esther 17
+        Job 18
+        Psalms 19
+        Proverbs 20
+        Ecclesiastes 21 
+        Song of Songs 22
+        Isaiah 23
+        Jeremiah 24
+        Lamentations 25 
+        Ezekiel 26
+        Daniel 27
+        Hosea  28
+        Joel 29
+        Amos 30
+        Obadiah 31 
+        Jonah 32
+        Micah 33
+        Nahum 34
+        Habakkuk 35 
+        Zephaniah 36
+        Haggai 37
+        Zechariah 38
+        Malachi 39
+    //}
+    //-New Testament 39-66{
+        Matthew 40
+        Mark 41
+        Luke 42
+        John 43
+        Acts 44     
+        Romans 45
+        1 Corinthians 46
+        2 Corinthians 47
+        Galatians 48
+        Ephesians 49
+        Philippians 50
+        Colossians 51
+        1 Thessalonians 52
+        2 Thessalonians 53 
+        1 Timothy 54
+        2 Timothy 55
+        Titus 56
+        Philemon 57
+        Hebrews 58
+        James 59
+        1 Peter 60
+        2 Peter 61
+        1 John 62
+        2 John 63
+        3 John 64
+        Jude 65
+        Revelation 66
+        //}
+*/
+//                                   0       1       2            3
+//These arrays follow this layout [rbook,rchapter,rverse,"verse text here"]
+
+var john3_16=[43,3,16,"For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life."];
+var arrayMaster=[
+    //john 3:16
+    [43,3,16,"For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life."],
+    //Jeremiah 29:11
+    [24,29,11,"For I know the plans I have for you,” declares the LORD, “plans to prosper you and not to harm you, plans to give you hope and a future."],
+    [49,2,6,"And God raised us up with Christ and seated us with him in the heavenly realms in Christ Jesus,"],
+    [43,1,1,"In the beginning was the Word, and the Word was with God, and the Word was God."]
+    ];
+//}  
+
+/*      This is to randomly select a verse at the start of the game         */
+var ref = random(1,10+arrayMaster.length + 0.9); ref =floor(ref);
+draw = function() {
+    //some style and misc. + background {
+    background (194, 244, 255);
+    fill(253, 255, 130);
+    noStroke();
+    ellipse(0,0,220,220);
+    fill(251, 255, 0);
+    noStroke();
+    ellipse(0,0,200,200);
+    stroke(24, 143, 0);
+    fill(40, 150, 0);
+    ellipse(224,358,442,134);
+    fill(140, 90, 32);
+    stroke(163, 102, 5);
+    rect(52,83,25,400);
+    rect(1,140,122,25);
+    
+    stroke(24, 143, 0);
+    fill(47, 255, 0);
+    ellipse(100,390,400,182);
+    ellipse(393,390,537,182);
+    fill(255, 187, 110);
+    strokeWeight(2);
+    stroke(196, 114, 0);
+    rect(2.5,180,393.5,100,20);
+    strokeWeight(1);
+    stroke(0, 0, 0);
+    fill(0, 0, 0);
+    textSize(10);
+    text("All verses are from NIV",5,10);
+    //}
+    
+    //guess info squares{
+    fill(255, 255, 255);
+    for(var y=1;y<6;y++){
+    if(y>1){y= y-0.2;}
+    rect(300,y*25,50,20);
+    rect(250,y*25,50,20);
+    rect(125,y*25,125,20);
+    }
+    fill(0, 0, 0);
+    text("Verse",311.0,20);
+    text("Book",180,20);
+    text("Chapter",258,20);
+    textSize(30);
+    //}
+    
+    //HoverBoxes{
+    fill(255, 255, 255);
+if(btnBook.isMouseInside()&&bookScreen===false&&chapterScreen===false&&verseScreen===false) {fill(150, 229, 255);}
+        rect(5,315,190,50,10);
+    fill(255, 255, 255);
+        if(btnChapter.isMouseInside()){fill(150, 229, 255);}
+        rect(197.5,315,50,50,10);
+    fill(255, 255, 255);
+        if(btnVerse.isMouseInside()){fill(150, 229, 255);}
+        rect(257.5,315,50,50,10);
+    fill(255, 255, 255);
+        if(btnSubmit.isMouseInside()&&bookScreen===false&&chapterScreen===false&&verseScreen===false){fill(150, 229, 255);}
+        rect(315,315,80,50,10);
+        fill(255, 255, 255);
+if(btnHelp.isMouseInside()&&bookScreen===false&&chapterScreen===false&&verseScreen===false) {fill(150, 229, 255);}
+        rect(25,25,50,50,10);
+        fill(0, 0, 0);
+        text("?",42,59);
+        fill(255, 255, 255);
+    //}
+    
+    //All guess functions{
+    
+    fill(0, 0, 0);
+    
+    //guess 1{
+    //book guess 1{   
+    if(bG1 === 1){
+    fill(0, 0, 0);
+    textSize(10);
+    text("?",135,39);
+    text(">",150,39);
+    if(bG1N === 0){bG1N = book;}
+    //books{
+    translate(155,-311);
+    if(bG1N === 1){text("Genesis",10,350);}
+        if(bG1N === 2){text("Exodus",10,350);}
+        if(bG1N === 3){text("Leviticus",10,350);}
+        if(bG1N === 4){text("Numbers",10,350);}
+        if(bG1N === 5){text("Deuteronomy",10,350);}
+        if(bG1N === 6){text("Joshua",10,350);}
+        if(bG1N === 7){text("Judges",10,350);}
+        if(bG1N === 8){text("Ruth",10,350);}
+        if(bG1N === 9){text("1 Samuel",10,350);}
+        if(bG1N === 10){text("2 Samuel",10,350);}
+        if(bG1N === 11){text("1 Kings",10,350);}
+        if(bG1N === 12){text("2 Kings",10,350);}
+        if(bG1N === 13){text("1 Chronicles",10,350);}
+        if(bG1N === 14){text("2 Chronicles",10,350);}
+        if(bG1N === 15){text("Ezra",10,350);}
+        if(bG1N === 16){text("Nehemiah",10,350);}
+        if(bG1N === 17){text("Esther",10,350);}
+        if(bG1N === 18){text("Job",10,350);}
+        if(bG1N === 19){text("Psalms",10,350);}
+        if(bG1N === 20){text("Proverbs",10,350);}
+        if(bG1N === 21){text("Ecclesiastes",10,350);}
+        if(bG1N === 22){text("Song of Songs",10,350);}
+        if(bG1N === 23){text("Isaiah",10,350);}
+        if(bG1N === 24){text("Jeremiah",10,350);}
+        if(bG1N === 25){text("Lamentations",10,350);}
+        if(bG1N === 26){text("Ezekiel",10,350);}
+        if(bG1N === 27){text("Daniel",10,350);}
+        if(bG1N === 28){text("Hosea",10,350);}
+        if(bG1N === 29){text("Joel",10,350);}
+        if(bG1N === 30){text("Amos",10,350);}
+        if(bG1N === 31){text("Obadiah",10,350);}
+        if(bG1N === 32){text("Jonah",10,350);}
+        if(bG1N === 33){text("Micah",10,350);}
+        if(bG1N === 34){text("Nahum",10,350);}
+        if(bG1N === 35){text("Habakkuk",10,350);}
+        if(bG1N === 36){text("Zephaniah",10,350);}
+        if(bG1N === 37){text("Haggai",10,350);}
+        if(bG1N === 38){text("Zechariah",10,350);}
+        if(bG1N === 39){text("Malachi",10,350);}
+if(bG1N === 40){text("Matthew",10,350);}
+        if(bG1N === 41){text("Mark",10,350);}
+        if(bG1N === 42){text("Luke",10,350);}
+        if(bG1N === 43){text("John",10,350);}
+        if(bG1N === 44){text("Acts",10,350);}
+        if(bG1N === 45){text("Romans",10,350);}
+        if(bG1N === 46){text("1 Corinthians",10,350);}
+        if(bG1N === 47){text("2 Corinthians",10,350);}
+        if(bG1N === 48){text("Galatians",10,350);}
+        if(bG1N === 49){text("Ephesians",10,350);}
+        if(bG1N === 50){text("Philippians",10,350);}
+        if(bG1N === 51){text("Colossians",10,350);}
+        if(bG1N === 52){text("1 Thessalonians",10,350);}
+        if(bG1N === 53){text("2 Thessalonians",10,350);}
+        if(bG1N === 54){text("1 Timothy",10,350);}
+        if(bG1N === 55){text("2 Timothy",10,350);}
+        if(bG1N === 56){text("Titus",10,350);}
+        if(bG1N === 57){text("Philemon",10,350);}
+        if(bG1N === 58){text("Hebrews",10,350);}
+        if(bG1N === 59){text("James",10,350);}
+        if(bG1N === 60){text("1 Peter",10,350);}
+        if(bG1N === 61){text("2 Peter",10,350);}
+        if(bG1N === 62){text("1 John",10,350);}
+        if(bG1N === 63){text("2 John",10,350);}
+        if(bG1N === 64){text("3 John",10,350);}
+        if(bG1N === 65){text("Jude",10,350);}
+        if(bG1N === 66){text("Revelation",10,350);}
+    translate(-155,311);
+    //}
+    }
+    
+    if(bG1 === 2){
+    textSize(10);
+    text("?",135,39);
+    text("<",150,39);
+    if(bG1N === 0){bG1N = book;}
+    //books{
+    translate(155,-311);
+    if(bG1N === 1){text("Genesis",10,350);}
+        if(bG1N === 2){text("Exodus",10,350);}
+        if(bG1N === 3){text("Leviticus",10,350);}
+        if(bG1N === 4){text("Numbers",10,350);}
+        if(bG1N === 5){text("Deuteronomy",10,350);}
+        if(bG1N === 6){text("Joshua",10,350);}
+        if(bG1N === 7){text("Judges",10,350);}
+        if(bG1N === 8){text("Ruth",10,350);}
+        if(bG1N === 9){text("1 Samuel",10,350);}
+        if(bG1N === 10){text("2 Samuel",10,350);}
+        if(bG1N === 11){text("1 Kings",10,350);}
+        if(bG1N === 12){text("2 Kings",10,350);}
+        if(bG1N === 13){text("1 Chronicles",10,350);}
+        if(bG1N === 14){text("2 Chronicles",10,350);}
+        if(bG1N === 15){text("Ezra",10,350);}
+        if(bG1N === 16){text("Nehemiah",10,350);}
+        if(bG1N === 17){text("Esther",10,350);}
+        if(bG1N === 18){text("Job",10,350);}
+        if(bG1N === 19){text("Psalms",10,350);}
+        if(bG1N === 20){text("Proverbs",10,350);}
+        if(bG1N === 21){text("Ecclesiastes",10,350);}
+        if(bG1N === 22){text("Song of Songs",10,350);}
+        if(bG1N === 23){text("Isaiah",10,350);}
+        if(bG1N === 24){text("Jeremiah",10,350);}
+        if(bG1N === 25){text("Lamentations",10,350);}
+        if(bG1N === 26){text("Ezekiel",10,350);}
+        if(bG1N === 27){text("Daniel",10,350);}
+        if(bG1N === 28){text("Hosea",10,350);}
+        if(bG1N === 29){text("Joel",10,350);}
+        if(bG1N === 30){text("Amos",10,350);}
+        if(bG1N === 31){text("Obadiah",10,350);}
+        if(bG1N === 32){text("Jonah",10,350);}
+        if(bG1N === 33){text("Micah",10,350);}
+        if(bG1N === 34){text("Nahum",10,350);}
+        if(bG1N === 35){text("Habakkuk",10,350);}
+        if(bG1N === 36){text("Zephaniah",10,350);}
+        if(bG1N === 37){text("Haggai",10,350);}
+        if(bG1N === 38){text("Zechariah",10,350);}
+        if(bG1N === 39){text("Malachi",10,350);}
+if(bG1N === 40){text("Matthew",10,350);}
+        if(bG1N === 41){text("Mark",10,350);}
+        if(bG1N === 42){text("Luke",10,350);}
+        if(bG1N === 43){text("John",10,350);}
+        if(bG1N === 44){text("Acts",10,350);}
+        if(bG1N === 45){text("Romans",10,350);}
+        if(bG1N === 46){text("1 Corinthians",10,350);}
+        if(bG1N === 47){text("2 Corinthians",10,350);}
+        if(bG1N === 48){text("Galatians",10,350);}
+        if(bG1N === 49){text("Ephesians",10,350);}
+        if(bG1N === 50){text("Philippians",10,350);}
+        if(bG1N === 51){text("Colossians",10,350);}
+        if(bG1N === 52){text("1 Thessalonians",10,350);}
+        if(bG1N === 53){text("2 Thessalonians",10,350);}
+        if(bG1N === 54){text("1 Timothy",10,350);}
+        if(bG1N === 55){text("2 Timothy",10,350);}
+        if(bG1N === 56){text("Titus",10,350);}
+        if(bG1N === 57){text("Philemon",10,350);}
+        if(bG1N === 58){text("Hebrews",10,350);}
+        if(bG1N === 59){text("James",10,350);}
+        if(bG1N === 60){text("1 Peter",10,350);}
+        if(bG1N === 61){text("2 Peter",10,350);}
+        if(bG1N === 62){text("1 John",10,350);}
+        if(bG1N === 63){text("2 John",10,350);}
+        if(bG1N === 64){text("3 John",10,350);}
+        if(bG1N === 65){text("Jude",10,350);}
+        if(bG1N === 66){text("Revelation",10,350);}
+    translate(-155,311);
+    //}
+    }
+    
+    if(bG1 === 3){
+    //text("verse correct",100,50);
+    //WinCheckmark{
+    translate(30,tbG1W);
+        fill(0, 255, 26);
+        rect(100,100,10,10,10);
+        stroke(0, 0, 0);
+        strokeWeight(1.5);
+        line(103,105,105,108);
+        line(108,103,105,108);
+        strokeWeight(1);
+    translate(-30,-tbG1W);
+    //}
+    textSize(10);
+    fill(0, 0, 0);
+    text("=",150,39);
+    if(bG1N === 0){bG1N = rbook;}
+    
+    //books{
+    translate(155,-311);
+    if(bG1N === 1){text("Genesis",10,350);}
+        if(bG1N === 2){text("Exodus",10,350);}
+        if(bG1N === 3){text("Leviticus",10,350);}
+        if(bG1N === 4){text("Numbers",10,350);}
+        if(bG1N === 5){text("Deuteronomy",10,350);}
+        if(bG1N === 6){text("Joshua",10,350);}
+        if(bG1N === 7){text("Judges",10,350);}
+        if(bG1N === 8){text("Ruth",10,350);}
+        if(bG1N === 9){text("1 Samuel",10,350);}
+        if(bG1N === 10){text("2 Samuel",10,350);}
+        if(bG1N === 11){text("1 Kings",10,350);}
+        if(bG1N === 12){text("2 Kings",10,350);}
+        if(bG1N === 13){text("1 Chronicles",10,350);}
+        if(bG1N === 14){text("2 Chronicles",10,350);}
+        if(bG1N === 15){text("Ezra",10,350);}
+        if(bG1N === 16){text("Nehemiah",10,350);}
+        if(bG1N === 17){text("Esther",10,350);}
+        if(bG1N === 18){text("Job",10,350);}
+        if(bG1N === 19){text("Psalms",10,350);}
+        if(bG1N === 20){text("Proverbs",10,350);}
+        if(bG1N === 21){text("Ecclesiastes",10,350);}
+        if(bG1N === 22){text("Song of Songs",10,350);}
+        if(bG1N === 23){text("Isaiah",10,350);}
+        if(bG1N === 24){text("Jeremiah",10,350);}
+        if(bG1N === 25){text("Lamentations",10,350);}
+        if(bG1N === 26){text("Ezekiel",10,350);}
+        if(bG1N === 27){text("Daniel",10,350);}
+        if(bG1N === 28){text("Hosea",10,350);}
+        if(bG1N === 29){text("Joel",10,350);}
+        if(bG1N === 30){text("Amos",10,350);}
+        if(bG1N === 31){text("Obadiah",10,350);}
+        if(bG1N === 32){text("Jonah",10,350);}
+        if(bG1N === 33){text("Micah",10,350);}
+        if(bG1N === 34){text("Nahum",10,350);}
+        if(bG1N === 35){text("Habakkuk",10,350);}
+        if(bG1N === 36){text("Zephaniah",10,350);}
+        if(bG1N === 37){text("Haggai",10,350);}
+        if(bG1N === 38){text("Zechariah",10,350);}
+        if(bG1N === 39){text("Malachi",10,350);}
+if(bG1N === 40){text("Matthew",10,350);}
+        if(bG1N === 41){text("Mark",10,350);}
+        if(bG1N === 42){text("Luke",10,350);}
+        if(bG1N === 43){text("John",10,350);}
+        if(bG1N === 44){text("Acts",10,350);}
+        if(bG1N === 45){text("Romans",10,350);}
+        if(bG1N === 46){text("1 Corinthians",10,350);}
+        if(bG1N === 47){text("2 Corinthians",10,350);}
+        if(bG1N === 48){text("Galatians",10,350);}
+        if(bG1N === 49){text("Ephesians",10,350);}
+        if(bG1N === 50){text("Philippians",10,350);}
+        if(bG1N === 51){text("Colossians",10,350);}
+        if(bG1N === 52){text("1 Thessalonians",10,350);}
+        if(bG1N === 53){text("2 Thessalonians",10,350);}
+        if(bG1N === 54){text("1 Timothy",10,350);}
+        if(bG1N === 55){text("2 Timothy",10,350);}
+        if(bG1N === 56){text("Titus",10,350);}
+        if(bG1N === 57){text("Philemon",10,350);}
+        if(bG1N === 58){text("Hebrews",10,350);}
+        if(bG1N === 59){text("James",10,350);}
+        if(bG1N === 60){text("1 Peter",10,350);}
+        if(bG1N === 61){text("2 Peter",10,350);}
+        if(bG1N === 62){text("1 John",10,350);}
+        if(bG1N === 63){text("2 John",10,350);}
+        if(bG1N === 64){text("3 John",10,350);}
+        if(bG1N === 65){text("Jude",10,350);}
+        if(bG1N === 66){text("Revelation",10,350);}
+    translate(-155,311);
+    //}
+    }
+    //}
+    
+    //chapter guess 1{   
+    if(cG1 === 1){
+    fill(0, 0, 0);
+    textSize(10);
+    text("?",259,39);
+    text(">",270,39);
+    if(cG1N === 0){cG1N = chapter;}
+    text(cG1N,280,39);
+    }
+    
+    if(cG1 === 2){
+    textSize(10);
+    text("?",259,39);
+    text("<",270,39);
+    if(cG1N === 0){cG1N = chapter;}
+    text(cG1N,280,39);
+    }
+    
+    if(cG1 === 3){
+    //text("verse correct",100,50);
+    //WinCheckmark{
+    translate(155,tcG1W);
+        fill(0, 255, 26);
+        rect(100,100,10,10,10);
+        stroke(0, 0, 0);
+        strokeWeight(1.5);
+        line(103,105,105,108);
+        line(108,103,105,108);
+        strokeWeight(1);
+    translate(-155,-tcG1W);
+    //}
+    textSize(10);
+    fill(0, 0, 0);
+    text("=",270,39);
+    text(rchapter,280,39);
+    }
+    //}
+    
+    //verse guess 1{
+    if(vG1 === 1){
+    fill(0, 0, 0);
+    textSize(10);
+    text("?",309,39);
+    text(">",320,39);
+    if(vG1N === 0){vG1N = verse;}
+    text(vG1N,330,39);
+    }
+    
+    if(vG1 === 2){
+    textSize(10);
+    text("?",309,39);
+    text("<",320,39);
+    if(vG1N === 0){vG1N = verse;}
+    text(vG1N,330,39);
+    }
+    
+    if(vG1 === 3){
+    //text("verse correct",100,50);
+    //WinCheckmark{
+    translate(205,tvG1W);
+        fill(0, 255, 26);
+        rect(100,100,10,10,10);
+        stroke(0, 0, 0);
+        strokeWeight(1.5);
+        line(103,105,105,108);
+        line(108,103,105,108);
+        strokeWeight(1);
+    translate(-205,-tvG1W);
+    //}
+    textSize(10);
+    fill(0, 0, 0);
+    text("=",320,39);
+    text(rverse,330,39);
+    }
+    //}
+    
+    //}
+    
+    //these random lines below like fill and translate are because of a mistake...
+    translate(0,20);
+    //guess 2{
+    //book guess 1{   
+    if(bG2 === 1){
+    fill(0, 0, 0);
+    textSize(10);
+    text("?",135,39);
+    text(">",150,39);
+    if(bG2N === 0){bG2N = book;}
+    //books{
+    translate(155,-311);
+    if(bG2N === 1){text("Genesis",10,350);}
+        if(bG2N === 2){text("Exodus",10,350);}
+        if(bG2N === 3){text("Leviticus",10,350);}
+        if(bG2N === 4){text("Numbers",10,350);}
+        if(bG2N === 5){text("Deuteronomy",10,350);}
+        if(bG2N === 6){text("Joshua",10,350);}
+        if(bG2N === 7){text("Judges",10,350);}
+        if(bG2N === 8){text("Ruth",10,350);}
+        if(bG2N === 9){text("1 Samuel",10,350);}
+        if(bG2N === 10){text("2 Samuel",10,350);}
+        if(bG2N === 11){text("1 Kings",10,350);}
+        if(bG2N === 12){text("2 Kings",10,350);}
+        if(bG2N === 13){text("1 Chronicles",10,350);}
+        if(bG2N === 14){text("2 Chronicles",10,350);}
+        if(bG2N === 15){text("Ezra",10,350);}
+        if(bG2N === 16){text("Nehemiah",10,350);}
+        if(bG2N === 17){text("Esther",10,350);}
+        if(bG2N === 18){text("Job",10,350);}
+        if(bG2N === 19){text("Psalms",10,350);}
+        if(bG2N === 20){text("Proverbs",10,350);}
+        if(bG2N === 21){text("Ecclesiastes",10,350);}
+        if(bG2N === 22){text("Song of Songs",10,350);}
+        if(bG2N === 23){text("Isaiah",10,350);}
+        if(bG2N === 24){text("Jeremiah",10,350);}
+        if(bG2N === 25){text("Lamentations",10,350);}
+        if(bG2N === 26){text("Ezekiel",10,350);}
+        if(bG2N === 27){text("Daniel",10,350);}
+        if(bG2N === 28){text("Hosea",10,350);}
+        if(bG2N === 29){text("Joel",10,350);}
+        if(bG2N === 30){text("Amos",10,350);}
+        if(bG2N === 31){text("Obadiah",10,350);}
+        if(bG2N === 32){text("Jonah",10,350);}
+        if(bG2N === 33){text("Micah",10,350);}
+        if(bG2N === 34){text("Nahum",10,350);}
+        if(bG2N === 35){text("Habakkuk",10,350);}
+        if(bG2N === 36){text("Zephaniah",10,350);}
+        if(bG2N === 37){text("Haggai",10,350);}
+        if(bG2N === 38){text("Zechariah",10,350);}
+        if(bG2N === 39){text("Malachi",10,350);}
+if(bG2N === 40){text("Matthew",10,350);}
+        if(bG2N === 41){text("Mark",10,350);}
+        if(bG2N === 42){text("Luke",10,350);}
+        if(bG2N === 43){text("John",10,350);}
+        if(bG2N === 44){text("Acts",10,350);}
+        if(bG2N === 45){text("Romans",10,350);}
+        if(bG2N === 46){text("1 Corinthians",10,350);}
+        if(bG2N === 47){text("2 Corinthians",10,350);}
+        if(bG2N === 48){text("Galatians",10,350);}
+        if(bG2N === 49){text("Ephesians",10,350);}
+        if(bG2N === 50){text("Philippians",10,350);}
+        if(bG2N === 51){text("Colossians",10,350);}
+        if(bG2N === 52){text("1 Thessalonians",10,350);}
+        if(bG2N === 53){text("2 Thessalonians",10,350);}
+        if(bG2N === 54){text("1 Timothy",10,350);}
+        if(bG2N === 55){text("2 Timothy",10,350);}
+        if(bG2N === 56){text("Titus",10,350);}
+        if(bG2N === 57){text("Philemon",10,350);}
+        if(bG2N === 58){text("Hebrews",10,350);}
+        if(bG2N === 59){text("James",10,350);}
+        if(bG2N === 60){text("1 Peter",10,350);}
+        if(bG2N === 61){text("2 Peter",10,350);}
+        if(bG2N === 62){text("1 John",10,350);}
+        if(bG2N === 63){text("2 John",10,350);}
+        if(bG2N === 64){text("3 John",10,350);}
+        if(bG2N === 65){text("Jude",10,350);}
+        if(bG2N === 66){text("Revelation",10,350);}
+    translate(-155,311);
+    //}
+    }
+    
+    if(bG2 === 2){
+    textSize(10);
+    text("?",135,39);
+    text("<",150,39);
+    if(bG2N === 0){bG2N = book;}
+    //books{
+    translate(155,-311);
+    if(bG2N === 1){text("Genesis",10,350);}
+        if(bG2N === 2){text("Exodus",10,350);}
+        if(bG2N === 3){text("Leviticus",10,350);}
+        if(bG2N === 4){text("Numbers",10,350);}
+        if(bG2N === 5){text("Deuteronomy",10,350);}
+        if(bG2N === 6){text("Joshua",10,350);}
+        if(bG2N === 7){text("Judges",10,350);}
+        if(bG2N === 8){text("Ruth",10,350);}
+        if(bG2N === 9){text("1 Samuel",10,350);}
+        if(bG2N === 10){text("2 Samuel",10,350);}
+        if(bG2N === 11){text("1 Kings",10,350);}
+        if(bG2N === 12){text("2 Kings",10,350);}
+        if(bG2N === 13){text("1 Chronicles",10,350);}
+        if(bG2N === 14){text("2 Chronicles",10,350);}
+        if(bG2N === 15){text("Ezra",10,350);}
+        if(bG2N === 16){text("Nehemiah",10,350);}
+        if(bG2N === 17){text("Esther",10,350);}
+        if(bG2N === 18){text("Job",10,350);}
+        if(bG2N === 19){text("Psalms",10,350);}
+        if(bG2N === 20){text("Proverbs",10,350);}
+        if(bG2N === 21){text("Ecclesiastes",10,350);}
+        if(bG2N === 22){text("Song of Songs",10,350);}
+        if(bG2N === 23){text("Isaiah",10,350);}
+        if(bG2N === 24){text("Jeremiah",10,350);}
+        if(bG2N === 25){text("Lamentations",10,350);}
+        if(bG2N === 26){text("Ezekiel",10,350);}
+        if(bG2N === 27){text("Daniel",10,350);}
+        if(bG2N === 28){text("Hosea",10,350);}
+        if(bG2N === 29){text("Joel",10,350);}
+        if(bG2N === 30){text("Amos",10,350);}
+        if(bG2N === 31){text("Obadiah",10,350);}
+        if(bG2N === 32){text("Jonah",10,350);}
+        if(bG2N === 33){text("Micah",10,350);}
+        if(bG2N === 34){text("Nahum",10,350);}
+        if(bG2N === 35){text("Habakkuk",10,350);}
+        if(bG2N === 36){text("Zephaniah",10,350);}
+        if(bG2N === 37){text("Haggai",10,350);}
+        if(bG2N === 38){text("Zechariah",10,350);}
+        if(bG2N === 39){text("Malachi",10,350);}
+if(bG2N === 40){text("Matthew",10,350);}
+        if(bG2N === 41){text("Mark",10,350);}
+        if(bG2N === 42){text("Luke",10,350);}
+        if(bG2N === 43){text("John",10,350);}
+        if(bG2N === 44){text("Acts",10,350);}
+        if(bG2N === 45){text("Romans",10,350);}
+        if(bG2N === 46){text("1 Corinthians",10,350);}
+        if(bG2N === 47){text("2 Corinthians",10,350);}
+        if(bG2N === 48){text("Galatians",10,350);}
+        if(bG2N === 49){text("Ephesians",10,350);}
+        if(bG2N === 50){text("Philippians",10,350);}
+        if(bG2N === 51){text("Colossians",10,350);}
+        if(bG2N === 52){text("1 Thessalonians",10,350);}
+        if(bG2N === 53){text("2 Thessalonians",10,350);}
+        if(bG2N === 54){text("1 Timothy",10,350);}
+        if(bG2N === 55){text("2 Timothy",10,350);}
+        if(bG2N === 56){text("Titus",10,350);}
+        if(bG2N === 57){text("Philemon",10,350);}
+        if(bG2N === 58){text("Hebrews",10,350);}
+        if(bG2N === 59){text("James",10,350);}
+        if(bG2N === 60){text("1 Peter",10,350);}
+        if(bG2N === 61){text("2 Peter",10,350);}
+        if(bG2N === 62){text("1 John",10,350);}
+        if(bG2N === 63){text("2 John",10,350);}
+        if(bG2N === 64){text("3 John",10,350);}
+        if(bG2N === 65){text("Jude",10,350);}
+        if(bG2N === 66){text("Revelation",10,350);}
+    translate(-155,311);
+    //}
+    }
+    
+    if(bG2 === 3){
+    //text("verse correct",100,50);
+    //WinCheckmark{
+    translate(30,tbG2W);
+        fill(0, 255, 26);
+        rect(100,100,10,10,10);
+        stroke(0, 0, 0);
+        strokeWeight(1.5);
+        line(103,105,105,108);
+        line(108,103,105,108);
+        strokeWeight(1);
+    translate(-30,-tbG2W);
+    //}
+    textSize(10);
+    fill(0, 0, 0);
+    text("=",150,39);
+    if(bG2N === 0){bG2N = rbook;}
+    
+    //books{
+    translate(155,-311);
+    if(bG2N === 1){text("Genesis",10,350);}
+        if(bG2N === 2){text("Exodus",10,350);}
+        if(bG2N === 3){text("Leviticus",10,350);}
+        if(bG2N === 4){text("Numbers",10,350);}
+        if(bG2N === 5){text("Deuteronomy",10,350);}
+        if(bG2N === 6){text("Joshua",10,350);}
+        if(bG2N === 7){text("Judges",10,350);}
+        if(bG2N === 8){text("Ruth",10,350);}
+        if(bG2N === 9){text("1 Samuel",10,350);}
+        if(bG2N === 10){text("2 Samuel",10,350);}
+        if(bG2N === 11){text("1 Kings",10,350);}
+        if(bG2N === 12){text("2 Kings",10,350);}
+        if(bG2N === 13){text("1 Chronicles",10,350);}
+        if(bG2N === 14){text("2 Chronicles",10,350);}
+        if(bG2N === 15){text("Ezra",10,350);}
+        if(bG2N === 16){text("Nehemiah",10,350);}
+        if(bG2N === 17){text("Esther",10,350);}
+        if(bG2N === 18){text("Job",10,350);}
+        if(bG2N === 19){text("Psalms",10,350);}
+        if(bG2N === 20){text("Proverbs",10,350);}
+        if(bG2N === 21){text("Ecclesiastes",10,350);}
+        if(bG2N === 22){text("Song of Songs",10,350);}
+        if(bG2N === 23){text("Isaiah",10,350);}
+        if(bG2N === 24){text("Jeremiah",10,350);}
+        if(bG2N === 25){text("Lamentations",10,350);}
+        if(bG2N === 26){text("Ezekiel",10,350);}
+        if(bG2N === 27){text("Daniel",10,350);}
+        if(bG2N === 28){text("Hosea",10,350);}
+        if(bG2N === 29){text("Joel",10,350);}
+        if(bG2N === 30){text("Amos",10,350);}
+        if(bG2N === 31){text("Obadiah",10,350);}
+        if(bG2N === 32){text("Jonah",10,350);}
+        if(bG2N === 33){text("Micah",10,350);}
+        if(bG2N === 34){text("Nahum",10,350);}
+        if(bG2N === 35){text("Habakkuk",10,350);}
+        if(bG2N === 36){text("Zephaniah",10,350);}
+        if(bG2N === 37){text("Haggai",10,350);}
+        if(bG2N === 38){text("Zechariah",10,350);}
+        if(bG2N === 39){text("Malachi",10,350);}
+if(bG2N === 40){text("Matthew",10,350);}
+        if(bG2N === 41){text("Mark",10,350);}
+        if(bG2N === 42){text("Luke",10,350);}
+        if(bG2N === 43){text("John",10,350);}
+        if(bG2N === 44){text("Acts",10,350);}
+        if(bG2N === 45){text("Romans",10,350);}
+        if(bG2N === 46){text("1 Corinthians",10,350);}
+        if(bG2N === 47){text("2 Corinthians",10,350);}
+        if(bG2N === 48){text("Galatians",10,350);}
+        if(bG2N === 49){text("Ephesians",10,350);}
+        if(bG2N === 50){text("Philippians",10,350);}
+        if(bG2N === 51){text("Colossians",10,350);}
+        if(bG2N === 52){text("1 Thessalonians",10,350);}
+        if(bG2N === 53){text("2 Thessalonians",10,350);}
+        if(bG2N === 54){text("1 Timothy",10,350);}
+        if(bG2N === 55){text("2 Timothy",10,350);}
+        if(bG2N === 56){text("Titus",10,350);}
+        if(bG2N === 57){text("Philemon",10,350);}
+        if(bG2N === 58){text("Hebrews",10,350);}
+        if(bG2N === 59){text("James",10,350);}
+        if(bG2N === 60){text("1 Peter",10,350);}
+        if(bG2N === 61){text("2 Peter",10,350);}
+        if(bG2N === 62){text("1 John",10,350);}
+        if(bG2N === 63){text("2 John",10,350);}
+        if(bG2N === 64){text("3 John",10,350);}
+        if(bG2N === 65){text("Jude",10,350);}
+        if(bG2N === 66){text("Revelation",10,350);}
+    translate(-155,311);
+    //}
+    }
+    //}
+    
+    //chapter guess 1{   
+    if(cG2 === 1){
+    fill(0, 0, 0);
+    textSize(10);
+    text("?",259,39);
+    text(">",270,39);
+    if(cG2N === 0){cG2N = chapter;}
+    text(cG2N,280,39);
+    }
+    
+    if(cG2 === 2){
+    textSize(10);
+    text("?",259,39);
+    text("<",270,39);
+    if(cG2N === 0){cG2N = chapter;}
+    text(cG2N,280,39);
+    }
+    
+    if(cG2 === 3){
+    //text("verse correct",100,50);
+    //WinCheckmark{
+    translate(155,tcG2W);
+        fill(0, 255, 26);
+        rect(100,100,10,10,10);
+        stroke(0, 0, 0);
+        strokeWeight(1.5);
+        line(103,105,105,108);
+        line(108,103,105,108);
+        strokeWeight(1);
+    translate(-155,-tcG2W);
+    //}
+    textSize(10);
+    fill(0, 0, 0);
+    text("=",270,39);
+    text(rchapter,280,39);
+    }
+    //}
+    
+    //verse guess 1{
+    if(vG2 === 1){
+    fill(0, 0, 0);
+    textSize(10);
+    text("?",309,39);
+    text(">",320,39);
+    if(vG2N === 0){vG2N = verse;}
+    text(vG2N,330,39);
+    }
+    
+    if(vG2 === 2){
+    textSize(10);
+    text("?",309,39);
+    text("<",320,39);
+    if(vG2N === 0){vG2N = verse;}
+    text(vG2N,330,39);
+    }
+    
+    if(vG2 === 3){
+    //text("verse correct",100,50);
+    //WinCheckmark{
+    translate(205,tvG2W);
+        fill(0, 255, 26);
+        rect(100,100,10,10,10);
+        stroke(0, 0, 0);
+        strokeWeight(1.5);
+        line(103,105,105,108);
+        line(108,103,105,108);
+        strokeWeight(1);
+    translate(-205,-tvG2W);
+    //}
+    textSize(10);
+    fill(0, 0, 0);
+    text("=",320,39);
+    text(rverse,330,39);
+    }
+    //}
+    //}
+    translate(0,-20);
+    
+    translate(0,40);
+    //guess 3{
+    //book guess 1{   
+    if(bG3 === 1){
+    fill(0, 0, 0);
+    textSize(10);
+    text("?",135,39);
+    text(">",150,39);
+    if(bG3N === 0){bG3N = book;}
+    //books{
+    translate(155,-311);
+    if(bG3N === 1){text("Genesis",10,350);}
+        if(bG3N === 2){text("Exodus",10,350);}
+        if(bG3N === 3){text("Leviticus",10,350);}
+        if(bG3N === 4){text("Numbers",10,350);}
+        if(bG3N === 5){text("Deuteronomy",10,350);}
+        if(bG3N === 6){text("Joshua",10,350);}
+        if(bG3N === 7){text("Judges",10,350);}
+        if(bG3N === 8){text("Ruth",10,350);}
+        if(bG3N === 9){text("1 Samuel",10,350);}
+        if(bG3N === 10){text("2 Samuel",10,350);}
+        if(bG3N === 11){text("1 Kings",10,350);}
+        if(bG3N === 12){text("2 Kings",10,350);}
+        if(bG3N === 13){text("1 Chronicles",10,350);}
+        if(bG3N === 14){text("2 Chronicles",10,350);}
+        if(bG3N === 15){text("Ezra",10,350);}
+        if(bG3N === 16){text("Nehemiah",10,350);}
+        if(bG3N === 17){text("Esther",10,350);}
+        if(bG3N === 18){text("Job",10,350);}
+        if(bG3N === 19){text("Psalms",10,350);}
+        if(bG3N === 20){text("Proverbs",10,350);}
+        if(bG3N === 21){text("Ecclesiastes",10,350);}
+        if(bG3N === 22){text("Song of Songs",10,350);}
+        if(bG3N === 23){text("Isaiah",10,350);}
+        if(bG3N === 24){text("Jeremiah",10,350);}
+        if(bG3N === 25){text("Lamentations",10,350);}
+        if(bG3N === 26){text("Ezekiel",10,350);}
+        if(bG3N === 27){text("Daniel",10,350);}
+        if(bG3N === 28){text("Hosea",10,350);}
+        if(bG3N === 29){text("Joel",10,350);}
+        if(bG3N === 30){text("Amos",10,350);}
+        if(bG3N === 31){text("Obadiah",10,350);}
+        if(bG3N === 32){text("Jonah",10,350);}
+        if(bG3N === 33){text("Micah",10,350);}
+        if(bG3N === 34){text("Nahum",10,350);}
+        if(bG3N === 35){text("Habakkuk",10,350);}
+        if(bG3N === 36){text("Zephaniah",10,350);}
+        if(bG3N === 37){text("Haggai",10,350);}
+        if(bG3N === 38){text("Zechariah",10,350);}
+        if(bG3N === 39){text("Malachi",10,350);}
+if(bG3N === 40){text("Matthew",10,350);}
+        if(bG3N === 41){text("Mark",10,350);}
+        if(bG3N === 42){text("Luke",10,350);}
+        if(bG3N === 43){text("John",10,350);}
+        if(bG3N === 44){text("Acts",10,350);}
+        if(bG3N === 45){text("Romans",10,350);}
+        if(bG3N === 46){text("1 Corinthians",10,350);}
+        if(bG3N === 47){text("2 Corinthians",10,350);}
+        if(bG3N === 48){text("Galatians",10,350);}
+        if(bG3N === 49){text("Ephesians",10,350);}
+        if(bG3N === 50){text("Philippians",10,350);}
+        if(bG3N === 51){text("Colossians",10,350);}
+        if(bG3N === 52){text("1 Thessalonians",10,350);}
+        if(bG3N === 53){text("2 Thessalonians",10,350);}
+        if(bG3N === 54){text("1 Timothy",10,350);}
+        if(bG3N === 55){text("2 Timothy",10,350);}
+        if(bG3N === 56){text("Titus",10,350);}
+        if(bG3N === 57){text("Philemon",10,350);}
+        if(bG3N === 58){text("Hebrews",10,350);}
+        if(bG3N === 59){text("James",10,350);}
+        if(bG3N === 60){text("1 Peter",10,350);}
+        if(bG3N === 61){text("2 Peter",10,350);}
+        if(bG3N === 62){text("1 John",10,350);}
+        if(bG3N === 63){text("2 John",10,350);}
+        if(bG3N === 64){text("3 John",10,350);}
+        if(bG3N === 65){text("Jude",10,350);}
+        if(bG3N === 66){text("Revelation",10,350);}
+    translate(-155,311);
+    //}
+    }
+    
+    if(bG3 === 2){
+    textSize(10);
+    text("?",135,39);
+    text("<",150,39);
+    if(bG3N === 0){bG3N = book;}
+    //books{
+    translate(155,-311);
+    if(bG3N === 1){text("Genesis",10,350);}
+        if(bG3N === 2){text("Exodus",10,350);}
+        if(bG3N === 3){text("Leviticus",10,350);}
+        if(bG3N === 4){text("Numbers",10,350);}
+        if(bG3N === 5){text("Deuteronomy",10,350);}
+        if(bG3N === 6){text("Joshua",10,350);}
+        if(bG3N === 7){text("Judges",10,350);}
+        if(bG3N === 8){text("Ruth",10,350);}
+        if(bG3N === 9){text("1 Samuel",10,350);}
+        if(bG3N === 10){text("2 Samuel",10,350);}
+        if(bG3N === 11){text("1 Kings",10,350);}
+        if(bG3N === 12){text("2 Kings",10,350);}
+        if(bG3N === 13){text("1 Chronicles",10,350);}
+        if(bG3N === 14){text("2 Chronicles",10,350);}
+        if(bG3N === 15){text("Ezra",10,350);}
+        if(bG3N === 16){text("Nehemiah",10,350);}
+        if(bG3N === 17){text("Esther",10,350);}
+        if(bG3N === 18){text("Job",10,350);}
+        if(bG3N === 19){text("Psalms",10,350);}
+        if(bG3N === 20){text("Proverbs",10,350);}
+        if(bG3N === 21){text("Ecclesiastes",10,350);}
+        if(bG3N === 22){text("Song of Songs",10,350);}
+        if(bG3N === 23){text("Isaiah",10,350);}
+        if(bG3N === 24){text("Jeremiah",10,350);}
+        if(bG3N === 25){text("Lamentations",10,350);}
+        if(bG3N === 26){text("Ezekiel",10,350);}
+        if(bG3N === 27){text("Daniel",10,350);}
+        if(bG3N === 28){text("Hosea",10,350);}
+        if(bG3N === 29){text("Joel",10,350);}
+        if(bG3N === 30){text("Amos",10,350);}
+        if(bG3N === 31){text("Obadiah",10,350);}
+        if(bG3N === 32){text("Jonah",10,350);}
+        if(bG3N === 33){text("Micah",10,350);}
+        if(bG3N === 34){text("Nahum",10,350);}
+        if(bG3N === 35){text("Habakkuk",10,350);}
+        if(bG3N === 36){text("Zephaniah",10,350);}
+        if(bG3N === 37){text("Haggai",10,350);}
+        if(bG3N === 38){text("Zechariah",10,350);}
+        if(bG3N === 39){text("Malachi",10,350);}
+if(bG3N === 40){text("Matthew",10,350);}
+        if(bG3N === 41){text("Mark",10,350);}
+        if(bG3N === 42){text("Luke",10,350);}
+        if(bG3N === 43){text("John",10,350);}
+        if(bG3N === 44){text("Acts",10,350);}
+        if(bG3N === 45){text("Romans",10,350);}
+        if(bG3N === 46){text("1 Corinthians",10,350);}
+        if(bG3N === 47){text("2 Corinthians",10,350);}
+        if(bG3N === 48){text("Galatians",10,350);}
+        if(bG3N === 49){text("Ephesians",10,350);}
+        if(bG3N === 50){text("Philippians",10,350);}
+        if(bG3N === 51){text("Colossians",10,350);}
+        if(bG3N === 52){text("1 Thessalonians",10,350);}
+        if(bG3N === 53){text("2 Thessalonians",10,350);}
+        if(bG3N === 54){text("1 Timothy",10,350);}
+        if(bG3N === 55){text("2 Timothy",10,350);}
+        if(bG3N === 56){text("Titus",10,350);}
+        if(bG3N === 57){text("Philemon",10,350);}
+        if(bG3N === 58){text("Hebrews",10,350);}
+        if(bG3N === 59){text("James",10,350);}
+        if(bG3N === 60){text("1 Peter",10,350);}
+        if(bG3N === 61){text("2 Peter",10,350);}
+        if(bG3N === 62){text("1 John",10,350);}
+        if(bG3N === 63){text("2 John",10,350);}
+        if(bG3N === 64){text("3 John",10,350);}
+        if(bG3N === 65){text("Jude",10,350);}
+        if(bG3N === 66){text("Revelation",10,350);}
+    translate(-155,311);
+    //}
+    }
+    
+    if(bG3 === 3){
+    //text("verse correct",100,50);
+    //WinCheckmark{
+    translate(30,tbG3W);
+        fill(0, 255, 26);
+        rect(100,100,10,10,10);
+        stroke(0, 0, 0);
+        strokeWeight(1.5);
+        line(103,105,105,108);
+        line(108,103,105,108);
+        strokeWeight(1);
+    translate(-30,-tbG3W);
+    //}
+    textSize(10);
+    fill(0, 0, 0);
+    text("=",150,39);
+    if(bG3N === 0){bG3N = rbook;}
+    
+    //books{
+    translate(155,-311);
+    if(bG3N === 1){text("Genesis",10,350);}
+        if(bG3N === 2){text("Exodus",10,350);}
+        if(bG3N === 3){text("Leviticus",10,350);}
+        if(bG3N === 4){text("Numbers",10,350);}
+        if(bG3N === 5){text("Deuteronomy",10,350);}
+        if(bG3N === 6){text("Joshua",10,350);}
+        if(bG3N === 7){text("Judges",10,350);}
+        if(bG3N === 8){text("Ruth",10,350);}
+        if(bG3N === 9){text("1 Samuel",10,350);}
+        if(bG3N === 10){text("2 Samuel",10,350);}
+        if(bG3N === 11){text("1 Kings",10,350);}
+        if(bG3N === 12){text("2 Kings",10,350);}
+        if(bG3N === 13){text("1 Chronicles",10,350);}
+        if(bG3N === 14){text("2 Chronicles",10,350);}
+        if(bG3N === 15){text("Ezra",10,350);}
+        if(bG3N === 16){text("Nehemiah",10,350);}
+        if(bG3N === 17){text("Esther",10,350);}
+        if(bG3N === 18){text("Job",10,350);}
+        if(bG3N === 19){text("Psalms",10,350);}
+        if(bG3N === 20){text("Proverbs",10,350);}
+        if(bG3N === 21){text("Ecclesiastes",10,350);}
+        if(bG3N === 22){text("Song of Songs",10,350);}
+        if(bG3N === 23){text("Isaiah",10,350);}
+        if(bG3N === 24){text("Jeremiah",10,350);}
+        if(bG3N === 25){text("Lamentations",10,350);}
+        if(bG3N === 26){text("Ezekiel",10,350);}
+        if(bG3N === 27){text("Daniel",10,350);}
+        if(bG3N === 28){text("Hosea",10,350);}
+        if(bG3N === 29){text("Joel",10,350);}
+        if(bG3N === 30){text("Amos",10,350);}
+        if(bG3N === 31){text("Obadiah",10,350);}
+        if(bG3N === 32){text("Jonah",10,350);}
+        if(bG3N === 33){text("Micah",10,350);}
+        if(bG3N === 34){text("Nahum",10,350);}
+        if(bG3N === 35){text("Habakkuk",10,350);}
+        if(bG3N === 36){text("Zephaniah",10,350);}
+        if(bG3N === 37){text("Haggai",10,350);}
+        if(bG3N === 38){text("Zechariah",10,350);}
+        if(bG3N === 39){text("Malachi",10,350);}
+if(bG3N === 40){text("Matthew",10,350);}
+        if(bG3N === 41){text("Mark",10,350);}
+        if(bG3N === 42){text("Luke",10,350);}
+        if(bG3N === 43){text("John",10,350);}
+        if(bG3N === 44){text("Acts",10,350);}
+        if(bG3N === 45){text("Romans",10,350);}
+        if(bG3N === 46){text("1 Corinthians",10,350);}
+        if(bG3N === 47){text("2 Corinthians",10,350);}
+        if(bG3N === 48){text("Galatians",10,350);}
+        if(bG3N === 49){text("Ephesians",10,350);}
+        if(bG3N === 50){text("Philippians",10,350);}
+        if(bG3N === 51){text("Colossians",10,350);}
+        if(bG3N === 52){text("1 Thessalonians",10,350);}
+        if(bG3N === 53){text("2 Thessalonians",10,350);}
+        if(bG3N === 54){text("1 Timothy",10,350);}
+        if(bG3N === 55){text("2 Timothy",10,350);}
+        if(bG3N === 56){text("Titus",10,350);}
+        if(bG3N === 57){text("Philemon",10,350);}
+        if(bG3N === 58){text("Hebrews",10,350);}
+        if(bG3N === 59){text("James",10,350);}
+        if(bG3N === 60){text("1 Peter",10,350);}
+        if(bG3N === 61){text("2 Peter",10,350);}
+        if(bG3N === 62){text("1 John",10,350);}
+        if(bG3N === 63){text("2 John",10,350);}
+        if(bG3N === 64){text("3 John",10,350);}
+        if(bG3N === 65){text("Jude",10,350);}
+        if(bG3N === 66){text("Revelation",10,350);}
+    translate(-155,311);
+    //}
+    }
+    //}
+    
+    //chapter guess 1{   
+    if(cG3 === 1){
+    fill(0, 0, 0);
+    textSize(10);
+    text("?",259,39);
+    text(">",270,39);
+    if(cG3N === 0){cG3N = chapter;}
+    text(cG3N,280,39);
+    }
+    
+    if(cG3 === 2){
+    textSize(10);
+    text("?",259,39);
+    text("<",270,39);
+    if(cG3N === 0){cG3N = chapter;}
+    text(cG3N,280,39);
+    }
+    
+    if(cG3 === 3){
+    //text("verse correct",100,50);
+    //WinCheckmark{
+    translate(155,tcG3W);
+        fill(0, 255, 26);
+        rect(100,100,10,10,10);
+        stroke(0, 0, 0);
+        strokeWeight(1.5);
+        line(103,105,105,108);
+        line(108,103,105,108);
+        strokeWeight(1);
+    translate(-155,-tcG3W);
+    //}
+    textSize(10);
+    fill(0, 0, 0);
+    text("=",270,39);
+    text(rchapter,280,39);
+    }
+    //}
+    
+    //verse guess 1{
+    if(vG3 === 1){
+    fill(0, 0, 0);
+    textSize(10);
+    text("?",309,39);
+    text(">",320,39);
+    if(vG3N === 0){vG3N = verse;}
+    text(vG3N,330,39);
+    }
+    
+    if(vG3 === 2){
+    textSize(10);
+    text("?",309,39);
+    text("<",320,39);
+    if(vG3N === 0){vG3N = verse;}
+    text(vG3N,330,39);
+    }
+    
+    if(vG3 === 3){
+    //text("verse correct",100,50);
+    //WinCheckmark{
+    translate(205,tvG3W);
+        fill(0, 255, 26);
+        rect(100,100,10,10,10);
+        stroke(0, 0, 0);
+        strokeWeight(1.5);
+        line(103,105,105,108);
+        line(108,103,105,108);
+        strokeWeight(1);
+    translate(-205,-tvG3W);
+    //}
+    textSize(10);
+    fill(0, 0, 0);
+    text("=",320,39);
+    text(rverse,330,39);
+    }
+    //}
+    //}
+    translate(0,-40);
+    
+    translate(0,60);
+    //guess 4{
+    //book guess 1{   
+    if(bG4 === 1){
+    fill(0, 0, 0);
+    textSize(10);
+    text("?",135,39);
+    text(">",150,39);
+    if(bG4N === 0){bG4N = book;}
+    //books{
+    translate(155,-311);
+    if(bG4N === 1){text("Genesis",10,350);}
+        if(bG4N === 2){text("Exodus",10,350);}
+        if(bG4N === 3){text("Leviticus",10,350);}
+        if(bG4N === 4){text("Numbers",10,350);}
+        if(bG4N === 5){text("Deuteronomy",10,350);}
+        if(bG4N === 6){text("Joshua",10,350);}
+        if(bG4N === 7){text("Judges",10,350);}
+        if(bG4N === 8){text("Ruth",10,350);}
+        if(bG4N === 9){text("1 Samuel",10,350);}
+        if(bG4N === 10){text("2 Samuel",10,350);}
+        if(bG4N === 11){text("1 Kings",10,350);}
+        if(bG4N === 12){text("2 Kings",10,350);}
+        if(bG4N === 13){text("1 Chronicles",10,350);}
+        if(bG4N === 14){text("2 Chronicles",10,350);}
+        if(bG4N === 15){text("Ezra",10,350);}
+        if(bG4N === 16){text("Nehemiah",10,350);}
+        if(bG4N === 17){text("Esther",10,350);}
+        if(bG4N === 18){text("Job",10,350);}
+        if(bG4N === 19){text("Psalms",10,350);}
+        if(bG4N === 20){text("Proverbs",10,350);}
+        if(bG4N === 21){text("Ecclesiastes",10,350);}
+        if(bG4N === 22){text("Song of Songs",10,350);}
+        if(bG4N === 23){text("Isaiah",10,350);}
+        if(bG4N === 24){text("Jeremiah",10,350);}
+        if(bG4N === 25){text("Lamentations",10,350);}
+        if(bG4N === 26){text("Ezekiel",10,350);}
+        if(bG4N === 27){text("Daniel",10,350);}
+        if(bG4N === 28){text("Hosea",10,350);}
+        if(bG4N === 29){text("Joel",10,350);}
+        if(bG4N === 30){text("Amos",10,350);}
+        if(bG4N === 31){text("Obadiah",10,350);}
+        if(bG4N === 32){text("Jonah",10,350);}
+        if(bG4N === 33){text("Micah",10,350);}
+        if(bG4N === 34){text("Nahum",10,350);}
+        if(bG4N === 35){text("Habakkuk",10,350);}
+        if(bG4N === 36){text("Zephaniah",10,350);}
+        if(bG4N === 37){text("Haggai",10,350);}
+        if(bG4N === 38){text("Zechariah",10,350);}
+        if(bG4N === 39){text("Malachi",10,350);}
+if(bG4N === 40){text("Matthew",10,350);}
+        if(bG4N === 41){text("Mark",10,350);}
+        if(bG4N === 42){text("Luke",10,350);}
+        if(bG4N === 43){text("John",10,350);}
+        if(bG4N === 44){text("Acts",10,350);}
+        if(bG4N === 45){text("Romans",10,350);}
+        if(bG4N === 46){text("1 Corinthians",10,350);}
+        if(bG4N === 47){text("2 Corinthians",10,350);}
+        if(bG4N === 48){text("Galatians",10,350);}
+        if(bG4N === 49){text("Ephesians",10,350);}
+        if(bG4N === 50){text("Philippians",10,350);}
+        if(bG4N === 51){text("Colossians",10,350);}
+        if(bG4N === 52){text("1 Thessalonians",10,350);}
+        if(bG4N === 53){text("2 Thessalonians",10,350);}
+        if(bG4N === 54){text("1 Timothy",10,350);}
+        if(bG4N === 55){text("2 Timothy",10,350);}
+        if(bG4N === 56){text("Titus",10,350);}
+        if(bG4N === 57){text("Philemon",10,350);}
+        if(bG4N === 58){text("Hebrews",10,350);}
+        if(bG4N === 59){text("James",10,350);}
+        if(bG4N === 60){text("1 Peter",10,350);}
+        if(bG4N === 61){text("2 Peter",10,350);}
+        if(bG4N === 62){text("1 John",10,350);}
+        if(bG4N === 63){text("2 John",10,350);}
+        if(bG4N === 64){text("3 John",10,350);}
+        if(bG4N === 65){text("Jude",10,350);}
+        if(bG4N === 66){text("Revelation",10,350);}
+    translate(-155,311);
+    //}
+    }
+    
+    if(bG4 === 2){
+    textSize(10);
+    text("?",135,39);
+    text("<",150,39);
+    if(bG4N === 0){bG4N = book;}
+    //books{
+    translate(155,-311);
+    if(bG4N === 1){text("Genesis",10,350);}
+        if(bG4N === 2){text("Exodus",10,350);}
+        if(bG4N === 3){text("Leviticus",10,350);}
+        if(bG4N === 4){text("Numbers",10,350);}
+        if(bG4N === 5){text("Deuteronomy",10,350);}
+        if(bG4N === 6){text("Joshua",10,350);}
+        if(bG4N === 7){text("Judges",10,350);}
+        if(bG4N === 8){text("Ruth",10,350);}
+        if(bG4N === 9){text("1 Samuel",10,350);}
+        if(bG4N === 10){text("2 Samuel",10,350);}
+        if(bG4N === 11){text("1 Kings",10,350);}
+        if(bG4N === 12){text("2 Kings",10,350);}
+        if(bG4N === 13){text("1 Chronicles",10,350);}
+        if(bG4N === 14){text("2 Chronicles",10,350);}
+        if(bG4N === 15){text("Ezra",10,350);}
+        if(bG4N === 16){text("Nehemiah",10,350);}
+        if(bG4N === 17){text("Esther",10,350);}
+        if(bG4N === 18){text("Job",10,350);}
+        if(bG4N === 19){text("Psalms",10,350);}
+        if(bG4N === 20){text("Proverbs",10,350);}
+        if(bG4N === 21){text("Ecclesiastes",10,350);}
+        if(bG4N === 22){text("Song of Songs",10,350);}
+        if(bG4N === 23){text("Isaiah",10,350);}
+        if(bG4N === 24){text("Jeremiah",10,350);}
+        if(bG4N === 25){text("Lamentations",10,350);}
+        if(bG4N === 26){text("Ezekiel",10,350);}
+        if(bG4N === 27){text("Daniel",10,350);}
+        if(bG4N === 28){text("Hosea",10,350);}
+        if(bG4N === 29){text("Joel",10,350);}
+        if(bG4N === 30){text("Amos",10,350);}
+        if(bG4N === 31){text("Obadiah",10,350);}
+        if(bG4N === 32){text("Jonah",10,350);}
+        if(bG4N === 33){text("Micah",10,350);}
+        if(bG4N === 34){text("Nahum",10,350);}
+        if(bG4N === 35){text("Habakkuk",10,350);}
+        if(bG4N === 36){text("Zephaniah",10,350);}
+        if(bG4N === 37){text("Haggai",10,350);}
+        if(bG4N === 38){text("Zechariah",10,350);}
+        if(bG4N === 39){text("Malachi",10,350);}
+if(bG4N === 40){text("Matthew",10,350);}
+        if(bG4N === 41){text("Mark",10,350);}
+        if(bG4N === 42){text("Luke",10,350);}
+        if(bG4N === 43){text("John",10,350);}
+        if(bG4N === 44){text("Acts",10,350);}
+        if(bG4N === 45){text("Romans",10,350);}
+        if(bG4N === 46){text("1 Corinthians",10,350);}
+        if(bG4N === 47){text("2 Corinthians",10,350);}
+        if(bG4N === 48){text("Galatians",10,350);}
+        if(bG4N === 49){text("Ephesians",10,350);}
+        if(bG4N === 50){text("Philippians",10,350);}
+        if(bG4N === 51){text("Colossians",10,350);}
+        if(bG4N === 52){text("1 Thessalonians",10,350);}
+        if(bG4N === 53){text("2 Thessalonians",10,350);}
+        if(bG4N === 54){text("1 Timothy",10,350);}
+        if(bG4N === 55){text("2 Timothy",10,350);}
+        if(bG4N === 56){text("Titus",10,350);}
+        if(bG4N === 57){text("Philemon",10,350);}
+        if(bG4N === 58){text("Hebrews",10,350);}
+        if(bG4N === 59){text("James",10,350);}
+        if(bG4N === 60){text("1 Peter",10,350);}
+        if(bG4N === 61){text("2 Peter",10,350);}
+        if(bG4N === 62){text("1 John",10,350);}
+        if(bG4N === 63){text("2 John",10,350);}
+        if(bG4N === 64){text("3 John",10,350);}
+        if(bG4N === 65){text("Jude",10,350);}
+        if(bG4N === 66){text("Revelation",10,350);}
+    translate(-155,311);
+    //}
+    }
+    
+    if(bG4 === 3){
+    //text("verse correct",100,50);
+    //WinCheckmark{
+    translate(30,tbG2W);
+        fill(0, 255, 26);
+        rect(100,100,10,10,10);
+        stroke(0, 0, 0);
+        strokeWeight(1.5);
+        line(103,105,105,108);
+        line(108,103,105,108);
+        strokeWeight(1);
+    translate(-30,-tbG2W);
+    //}
+    textSize(10);
+    fill(0, 0, 0);
+    text("=",150,39);
+    if(bG4N === 0){bG4N = rbook;}
+    
+    //books{
+    translate(155,-311);
+    if(bG4N === 1){text("Genesis",10,350);}
+        if(bG4N === 2){text("Exodus",10,350);}
+        if(bG4N === 3){text("Leviticus",10,350);}
+        if(bG4N === 4){text("Numbers",10,350);}
+        if(bG4N === 5){text("Deuteronomy",10,350);}
+        if(bG4N === 6){text("Joshua",10,350);}
+        if(bG4N === 7){text("Judges",10,350);}
+        if(bG4N === 8){text("Ruth",10,350);}
+        if(bG4N === 9){text("1 Samuel",10,350);}
+        if(bG4N === 10){text("2 Samuel",10,350);}
+        if(bG4N === 11){text("1 Kings",10,350);}
+        if(bG4N === 12){text("2 Kings",10,350);}
+        if(bG4N === 13){text("1 Chronicles",10,350);}
+        if(bG4N === 14){text("2 Chronicles",10,350);}
+        if(bG4N === 15){text("Ezra",10,350);}
+        if(bG4N === 16){text("Nehemiah",10,350);}
+        if(bG4N === 17){text("Esther",10,350);}
+        if(bG4N === 18){text("Job",10,350);}
+        if(bG4N === 19){text("Psalms",10,350);}
+        if(bG4N === 20){text("Proverbs",10,350);}
+        if(bG4N === 21){text("Ecclesiastes",10,350);}
+        if(bG4N === 22){text("Song of Songs",10,350);}
+        if(bG4N === 23){text("Isaiah",10,350);}
+        if(bG4N === 24){text("Jeremiah",10,350);}
+        if(bG4N === 25){text("Lamentations",10,350);}
+        if(bG4N === 26){text("Ezekiel",10,350);}
+        if(bG4N === 27){text("Daniel",10,350);}
+        if(bG4N === 28){text("Hosea",10,350);}
+        if(bG4N === 29){text("Joel",10,350);}
+        if(bG4N === 30){text("Amos",10,350);}
+        if(bG4N === 31){text("Obadiah",10,350);}
+        if(bG4N === 32){text("Jonah",10,350);}
+        if(bG4N === 33){text("Micah",10,350);}
+        if(bG4N === 34){text("Nahum",10,350);}
+        if(bG4N === 35){text("Habakkuk",10,350);}
+        if(bG4N === 36){text("Zephaniah",10,350);}
+        if(bG4N === 37){text("Haggai",10,350);}
+        if(bG4N === 38){text("Zechariah",10,350);}
+        if(bG4N === 39){text("Malachi",10,350);}
+if(bG4N === 40){text("Matthew",10,350);}
+        if(bG4N === 41){text("Mark",10,350);}
+        if(bG4N === 42){text("Luke",10,350);}
+        if(bG4N === 43){text("John",10,350);}
+        if(bG4N === 44){text("Acts",10,350);}
+        if(bG4N === 45){text("Romans",10,350);}
+        if(bG4N === 46){text("1 Corinthians",10,350);}
+        if(bG4N === 47){text("2 Corinthians",10,350);}
+        if(bG4N === 48){text("Galatians",10,350);}
+        if(bG4N === 49){text("Ephesians",10,350);}
+        if(bG4N === 50){text("Philippians",10,350);}
+        if(bG4N === 51){text("Colossians",10,350);}
+        if(bG4N === 52){text("1 Thessalonians",10,350);}
+        if(bG4N === 53){text("2 Thessalonians",10,350);}
+        if(bG4N === 54){text("1 Timothy",10,350);}
+        if(bG4N === 55){text("2 Timothy",10,350);}
+        if(bG4N === 56){text("Titus",10,350);}
+        if(bG4N === 57){text("Philemon",10,350);}
+        if(bG4N === 58){text("Hebrews",10,350);}
+        if(bG4N === 59){text("James",10,350);}
+        if(bG4N === 60){text("1 Peter",10,350);}
+        if(bG4N === 61){text("2 Peter",10,350);}
+        if(bG4N === 62){text("1 John",10,350);}
+        if(bG4N === 63){text("2 John",10,350);}
+        if(bG4N === 64){text("3 John",10,350);}
+        if(bG4N === 65){text("Jude",10,350);}
+        if(bG4N === 66){text("Revelation",10,350);}
+    translate(-155,311);
+    //}
+    }
+    //}
+    
+    //chapter guess 1{   
+    if(cG4 === 1){
+    fill(0, 0, 0);
+    textSize(10);
+    text("?",259,39);
+    text(">",270,39);
+    if(cG4N === 0){cG4N = chapter;}
+    text(cG4N,280,39);
+    }
+    
+    if(cG4 === 2){
+    textSize(10);
+    text("?",259,39);
+    text("<",270,39);
+    if(cG4N === 0){cG4N = chapter;}
+    text(cG4N,280,39);
+    }
+    
+    if(cG4 === 3){
+    //text("verse correct",100,50);
+    //WinCheckmark{
+    translate(155,tcG2W);
+        fill(0, 255, 26);
+        rect(100,100,10,10,10);
+        stroke(0, 0, 0);
+        strokeWeight(1.5);
+        line(103,105,105,108);
+        line(108,103,105,108);
+        strokeWeight(1);
+    translate(-155,-tcG2W);
+    //}
+    textSize(10);
+    fill(0, 0, 0);
+    text("=",270,39);
+    text(rchapter,280,39);
+    }
+    //}
+    
+    //verse guess 1{
+    if(vG4 === 1){
+    fill(0, 0, 0);
+    textSize(10);
+    text("?",309,39);
+    text(">",320,39);
+    if(vG4N === 0){vG4N = verse;}
+    text(vG4N,330,39);
+    }
+    
+    if(vG4 === 2){
+    textSize(10);
+    text("?",309,39);
+    text("<",320,39);
+    if(vG4N === 0){vG4N = verse;}
+    text(vG4N,330,39);
+    }
+    
+    if(vG4 === 3){
+    //text("verse correct",100,50);
+    //WinCheckmark{
+    translate(205,tvG2W);
+        fill(0, 255, 26);
+        rect(100,100,10,10,10);
+        stroke(0, 0, 0);
+        strokeWeight(1.5);
+        line(103,105,105,108);
+        line(108,103,105,108);
+        strokeWeight(1);
+    translate(-205,-tvG2W);
+    //}
+    textSize(10);
+    fill(0, 0, 0);
+    text("=",320,39);
+    text(rverse,330,39);
+    }
+    //}
+    //}
+    translate(0,-60);
+    
+    translate(0,80);
+    //guess 5{
+    //book guess 1{   
+    if(bG5 === 1){
+    fill(0, 0, 0);
+    textSize(10);
+    text("?",135,39);
+    text(">",150,39);
+    if(bG5N === 0){bG5N = book;}
+    //books{
+    translate(155,-311);
+    if(bG5N === 1){text("Genesis",10,350);}
+        if(bG5N === 2){text("Exodus",10,350);}
+        if(bG5N === 3){text("Leviticus",10,350);}
+        if(bG5N === 4){text("Numbers",10,350);}
+        if(bG5N === 5){text("Deuteronomy",10,350);}
+        if(bG5N === 6){text("Joshua",10,350);}
+        if(bG5N === 7){text("Judges",10,350);}
+        if(bG5N === 8){text("Ruth",10,350);}
+        if(bG5N === 9){text("1 Samuel",10,350);}
+        if(bG5N === 10){text("2 Samuel",10,350);}
+        if(bG5N === 11){text("1 Kings",10,350);}
+        if(bG5N === 12){text("2 Kings",10,350);}
+        if(bG5N === 13){text("1 Chronicles",10,350);}
+        if(bG5N === 14){text("2 Chronicles",10,350);}
+        if(bG5N === 15){text("Ezra",10,350);}
+        if(bG5N === 16){text("Nehemiah",10,350);}
+        if(bG5N === 17){text("Esther",10,350);}
+        if(bG5N === 18){text("Job",10,350);}
+        if(bG5N === 19){text("Psalms",10,350);}
+        if(bG5N === 20){text("Proverbs",10,350);}
+        if(bG5N === 21){text("Ecclesiastes",10,350);}
+        if(bG5N === 22){text("Song of Songs",10,350);}
+        if(bG5N === 23){text("Isaiah",10,350);}
+        if(bG5N === 24){text("Jeremiah",10,350);}
+        if(bG5N === 25){text("Lamentations",10,350);}
+        if(bG5N === 26){text("Ezekiel",10,350);}
+        if(bG5N === 27){text("Daniel",10,350);}
+        if(bG5N === 28){text("Hosea",10,350);}
+        if(bG5N === 29){text("Joel",10,350);}
+        if(bG5N === 30){text("Amos",10,350);}
+        if(bG5N === 31){text("Obadiah",10,350);}
+        if(bG5N === 32){text("Jonah",10,350);}
+        if(bG5N === 33){text("Micah",10,350);}
+        if(bG5N === 34){text("Nahum",10,350);}
+        if(bG5N === 35){text("Habakkuk",10,350);}
+        if(bG5N === 36){text("Zephaniah",10,350);}
+        if(bG5N === 37){text("Haggai",10,350);}
+        if(bG5N === 38){text("Zechariah",10,350);}
+        if(bG5N === 39){text("Malachi",10,350);}
+if(bG5N === 40){text("Matthew",10,350);}
+        if(bG5N === 41){text("Mark",10,350);}
+        if(bG5N === 42){text("Luke",10,350);}
+        if(bG5N === 43){text("John",10,350);}
+        if(bG5N === 44){text("Acts",10,350);}
+        if(bG5N === 45){text("Romans",10,350);}
+        if(bG5N === 46){text("1 Corinthians",10,350);}
+        if(bG5N === 47){text("2 Corinthians",10,350);}
+        if(bG5N === 48){text("Galatians",10,350);}
+        if(bG5N === 49){text("Ephesians",10,350);}
+        if(bG5N === 50){text("Philippians",10,350);}
+        if(bG5N === 51){text("Colossians",10,350);}
+        if(bG5N === 52){text("1 Thessalonians",10,350);}
+        if(bG5N === 53){text("2 Thessalonians",10,350);}
+        if(bG5N === 54){text("1 Timothy",10,350);}
+        if(bG5N === 55){text("2 Timothy",10,350);}
+        if(bG5N === 56){text("Titus",10,350);}
+        if(bG5N === 57){text("Philemon",10,350);}
+        if(bG5N === 58){text("Hebrews",10,350);}
+        if(bG5N === 59){text("James",10,350);}
+        if(bG5N === 60){text("1 Peter",10,350);}
+        if(bG5N === 61){text("2 Peter",10,350);}
+        if(bG5N === 62){text("1 John",10,350);}
+        if(bG5N === 63){text("2 John",10,350);}
+        if(bG5N === 64){text("3 John",10,350);}
+        if(bG5N === 65){text("Jude",10,350);}
+        if(bG5N === 66){text("Revelation",10,350);}
+    translate(-155,311);
+    //}
+    }
+    
+    if(bG5 === 2){
+    textSize(10);
+    text("?",135,39);
+    text("<",150,39);
+    if(bG5N === 0){bG5N = book;}
+    //books{
+    translate(155,-311);
+    if(bG5N === 1){text("Genesis",10,350);}
+        if(bG5N === 2){text("Exodus",10,350);}
+        if(bG5N === 3){text("Leviticus",10,350);}
+        if(bG5N === 4){text("Numbers",10,350);}
+        if(bG5N === 5){text("Deuteronomy",10,350);}
+        if(bG5N === 6){text("Joshua",10,350);}
+        if(bG5N === 7){text("Judges",10,350);}
+        if(bG5N === 8){text("Ruth",10,350);}
+        if(bG5N === 9){text("1 Samuel",10,350);}
+        if(bG5N === 10){text("2 Samuel",10,350);}
+        if(bG5N === 11){text("1 Kings",10,350);}
+        if(bG5N === 12){text("2 Kings",10,350);}
+        if(bG5N === 13){text("1 Chronicles",10,350);}
+        if(bG5N === 14){text("2 Chronicles",10,350);}
+        if(bG5N === 15){text("Ezra",10,350);}
+        if(bG5N === 16){text("Nehemiah",10,350);}
+        if(bG5N === 17){text("Esther",10,350);}
+        if(bG5N === 18){text("Job",10,350);}
+        if(bG5N === 19){text("Psalms",10,350);}
+        if(bG5N === 20){text("Proverbs",10,350);}
+        if(bG5N === 21){text("Ecclesiastes",10,350);}
+        if(bG5N === 22){text("Song of Songs",10,350);}
+        if(bG5N === 23){text("Isaiah",10,350);}
+        if(bG5N === 24){text("Jeremiah",10,350);}
+        if(bG5N === 25){text("Lamentations",10,350);}
+        if(bG5N === 26){text("Ezekiel",10,350);}
+        if(bG5N === 27){text("Daniel",10,350);}
+        if(bG5N === 28){text("Hosea",10,350);}
+        if(bG5N === 29){text("Joel",10,350);}
+        if(bG5N === 30){text("Amos",10,350);}
+        if(bG5N === 31){text("Obadiah",10,350);}
+        if(bG5N === 32){text("Jonah",10,350);}
+        if(bG5N === 33){text("Micah",10,350);}
+        if(bG5N === 34){text("Nahum",10,350);}
+        if(bG5N === 35){text("Habakkuk",10,350);}
+        if(bG5N === 36){text("Zephaniah",10,350);}
+        if(bG5N === 37){text("Haggai",10,350);}
+        if(bG5N === 38){text("Zechariah",10,350);}
+        if(bG5N === 39){text("Malachi",10,350);}
+if(bG5N === 40){text("Matthew",10,350);}
+        if(bG5N === 41){text("Mark",10,350);}
+        if(bG5N === 42){text("Luke",10,350);}
+        if(bG5N === 43){text("John",10,350);}
+        if(bG5N === 44){text("Acts",10,350);}
+        if(bG5N === 45){text("Romans",10,350);}
+        if(bG5N === 46){text("1 Corinthians",10,350);}
+        if(bG5N === 47){text("2 Corinthians",10,350);}
+        if(bG5N === 48){text("Galatians",10,350);}
+        if(bG5N === 49){text("Ephesians",10,350);}
+        if(bG5N === 50){text("Philippians",10,350);}
+        if(bG5N === 51){text("Colossians",10,350);}
+        if(bG5N === 52){text("1 Thessalonians",10,350);}
+        if(bG5N === 53){text("2 Thessalonians",10,350);}
+        if(bG5N === 54){text("1 Timothy",10,350);}
+        if(bG5N === 55){text("2 Timothy",10,350);}
+        if(bG5N === 56){text("Titus",10,350);}
+        if(bG5N === 57){text("Philemon",10,350);}
+        if(bG5N === 58){text("Hebrews",10,350);}
+        if(bG5N === 59){text("James",10,350);}
+        if(bG5N === 60){text("1 Peter",10,350);}
+        if(bG5N === 61){text("2 Peter",10,350);}
+        if(bG5N === 62){text("1 John",10,350);}
+        if(bG5N === 63){text("2 John",10,350);}
+        if(bG5N === 64){text("3 John",10,350);}
+        if(bG5N === 65){text("Jude",10,350);}
+        if(bG5N === 66){text("Revelation",10,350);}
+    translate(-155,311);
+    //}
+    }
+    
+    if(bG5 === 3){
+    //text("verse correct",100,50);
+    //WinCheckmark{
+    translate(30,tbG5W);
+        fill(0, 255, 26);
+        rect(100,100,10,10,10);
+        stroke(0, 0, 0);
+        strokeWeight(1.5);
+        line(103,105,105,108);
+        line(108,103,105,108);
+        strokeWeight(1);
+    translate(-30,-tbG5W);
+    //}
+    textSize(10);
+    fill(0, 0, 0);
+    text("=",150,39);
+    if(bG5N === 0){bG5N = rbook;}
+    
+    //books{
+    translate(155,-311);
+    if(bG5N === 1){text("Genesis",10,350);}
+        if(bG5N === 2){text("Exodus",10,350);}
+        if(bG5N === 3){text("Leviticus",10,350);}
+        if(bG5N === 4){text("Numbers",10,350);}
+        if(bG5N === 5){text("Deuteronomy",10,350);}
+        if(bG5N === 6){text("Joshua",10,350);}
+        if(bG5N === 7){text("Judges",10,350);}
+        if(bG5N === 8){text("Ruth",10,350);}
+        if(bG5N === 9){text("1 Samuel",10,350);}
+        if(bG5N === 10){text("2 Samuel",10,350);}
+        if(bG5N === 11){text("1 Kings",10,350);}
+        if(bG5N === 12){text("2 Kings",10,350);}
+        if(bG5N === 13){text("1 Chronicles",10,350);}
+        if(bG5N === 14){text("2 Chronicles",10,350);}
+        if(bG5N === 15){text("Ezra",10,350);}
+        if(bG5N === 16){text("Nehemiah",10,350);}
+        if(bG5N === 17){text("Esther",10,350);}
+        if(bG5N === 18){text("Job",10,350);}
+        if(bG5N === 19){text("Psalms",10,350);}
+        if(bG5N === 20){text("Proverbs",10,350);}
+        if(bG5N === 21){text("Ecclesiastes",10,350);}
+        if(bG5N === 22){text("Song of Songs",10,350);}
+        if(bG5N === 23){text("Isaiah",10,350);}
+        if(bG5N === 24){text("Jeremiah",10,350);}
+        if(bG5N === 25){text("Lamentations",10,350);}
+        if(bG5N === 26){text("Ezekiel",10,350);}
+        if(bG5N === 27){text("Daniel",10,350);}
+        if(bG5N === 28){text("Hosea",10,350);}
+        if(bG5N === 29){text("Joel",10,350);}
+        if(bG5N === 30){text("Amos",10,350);}
+        if(bG5N === 31){text("Obadiah",10,350);}
+        if(bG5N === 32){text("Jonah",10,350);}
+        if(bG5N === 33){text("Micah",10,350);}
+        if(bG5N === 34){text("Nahum",10,350);}
+        if(bG5N === 35){text("Habakkuk",10,350);}
+        if(bG5N === 36){text("Zephaniah",10,350);}
+        if(bG5N === 37){text("Haggai",10,350);}
+        if(bG5N === 38){text("Zechariah",10,350);}
+        if(bG5N === 39){text("Malachi",10,350);}
+if(bG5N === 40){text("Matthew",10,350);}
+        if(bG5N === 41){text("Mark",10,350);}
+        if(bG5N === 42){text("Luke",10,350);}
+        if(bG5N === 43){text("John",10,350);}
+        if(bG5N === 44){text("Acts",10,350);}
+        if(bG5N === 45){text("Romans",10,350);}
+        if(bG5N === 46){text("1 Corinthians",10,350);}
+        if(bG5N === 47){text("2 Corinthians",10,350);}
+        if(bG5N === 48){text("Galatians",10,350);}
+        if(bG5N === 49){text("Ephesians",10,350);}
+        if(bG5N === 50){text("Philippians",10,350);}
+        if(bG5N === 51){text("Colossians",10,350);}
+        if(bG5N === 52){text("1 Thessalonians",10,350);}
+        if(bG5N === 53){text("2 Thessalonians",10,350);}
+        if(bG5N === 54){text("1 Timothy",10,350);}
+        if(bG5N === 55){text("2 Timothy",10,350);}
+        if(bG5N === 56){text("Titus",10,350);}
+        if(bG5N === 57){text("Philemon",10,350);}
+        if(bG5N === 58){text("Hebrews",10,350);}
+        if(bG5N === 59){text("James",10,350);}
+        if(bG5N === 60){text("1 Peter",10,350);}
+        if(bG5N === 61){text("2 Peter",10,350);}
+        if(bG5N === 62){text("1 John",10,350);}
+        if(bG5N === 63){text("2 John",10,350);}
+        if(bG5N === 64){text("3 John",10,350);}
+        if(bG5N === 65){text("Jude",10,350);}
+        if(bG5N === 66){text("Revelation",10,350);}
+    translate(-155,311);
+    //}
+    }
+    //}
+    
+    //chapter guess 1{   
+    if(cG5 === 1){
+    fill(0, 0, 0);
+    textSize(10);
+    text("?",259,39);
+    text(">",270,39);
+    if(cG5N === 0){cG5N = chapter;}
+    text(cG5N,280,39);
+    }
+    
+    if(cG5 === 2){
+    textSize(10);
+    text("?",259,39);
+    text("<",270,39);
+    if(cG5N === 0){cG5N = chapter;}
+    text(cG5N,280,39);
+    }
+    
+    if(cG5 === 3){
+    //text("verse correct",100,50);
+    //WinCheckmark{
+    translate(155,tcG5W);
+        fill(0, 255, 26);
+        rect(100,100,10,10,10);
+        stroke(0, 0, 0);
+        strokeWeight(1.5);
+        line(103,105,105,108);
+        line(108,103,105,108);
+        strokeWeight(1);
+    translate(-155,-tcG5W);
+    //}
+    textSize(10);
+    fill(0, 0, 0);
+    text("=",270,39);
+    text(rchapter,280,39);
+    }
+    //}
+    
+    //verse guess 1{
+    if(vG5 === 1){
+    fill(0, 0, 0);
+    textSize(10);
+    text("?",309,39);
+    text(">",320,39);
+    if(vG5N === 0){vG5N = verse;}
+    text(vG5N,330,39);
+    }
+    
+    if(vG5 === 2){
+    textSize(10);
+    text("?",309,39);
+    text("<",320,39);
+    if(vG5N === 0){vG5N = verse;}
+    text(vG5N,330,39);
+    }
+    
+    if(vG5 === 3){
+    //text("verse correct",100,50);
+    //WinCheckmark{
+    translate(205,tvG5W);
+        fill(0, 255, 26);
+        rect(100,100,10,10,10);
+        stroke(0, 0, 0);
+        strokeWeight(1.5);
+        line(103,105,105,108);
+        line(108,103,105,108);
+        strokeWeight(1);
+    translate(-205,-tvG5W);
+    //}
+    textSize(10);
+    fill(0, 0, 0);
+    text("=",320,39);
+    text(rverse,330,39);
+    }
+    //}
+    //}
+    translate(0,-80);
+    
+    translate(0,100);
+    //guess 6{
+    //book guess 1{   
+    if(bG6 === 1){
+    fill(0, 0, 0);
+    textSize(10);
+    text("?",135,39);
+    text(">",150,39);
+    if(bG6N === 0){bG6N = book;}
+    //books{
+    translate(155,-311);
+    if(bG6N === 1){text("Genesis",10,350);}
+        if(bG6N === 2){text("Exodus",10,350);}
+        if(bG6N === 3){text("Leviticus",10,350);}
+        if(bG6N === 4){text("Numbers",10,350);}
+        if(bG6N === 5){text("Deuteronomy",10,350);}
+        if(bG6N === 6){text("Joshua",10,350);}
+        if(bG6N === 7){text("Judges",10,350);}
+        if(bG6N === 8){text("Ruth",10,350);}
+        if(bG6N === 9){text("1 Samuel",10,350);}
+        if(bG6N === 10){text("2 Samuel",10,350);}
+        if(bG6N === 11){text("1 Kings",10,350);}
+        if(bG6N === 12){text("2 Kings",10,350);}
+        if(bG6N === 13){text("1 Chronicles",10,350);}
+        if(bG6N === 14){text("2 Chronicles",10,350);}
+        if(bG6N === 15){text("Ezra",10,350);}
+        if(bG6N === 16){text("Nehemiah",10,350);}
+        if(bG6N === 17){text("Esther",10,350);}
+        if(bG6N === 18){text("Job",10,350);}
+        if(bG6N === 19){text("Psalms",10,350);}
+        if(bG6N === 20){text("Proverbs",10,350);}
+        if(bG6N === 21){text("Ecclesiastes",10,350);}
+        if(bG6N === 22){text("Song of Songs",10,350);}
+        if(bG6N === 23){text("Isaiah",10,350);}
+        if(bG6N === 24){text("Jeremiah",10,350);}
+        if(bG6N === 25){text("Lamentations",10,350);}
+        if(bG6N === 26){text("Ezekiel",10,350);}
+        if(bG6N === 27){text("Daniel",10,350);}
+        if(bG6N === 28){text("Hosea",10,350);}
+        if(bG6N === 29){text("Joel",10,350);}
+        if(bG6N === 30){text("Amos",10,350);}
+        if(bG6N === 31){text("Obadiah",10,350);}
+        if(bG6N === 32){text("Jonah",10,350);}
+        if(bG6N === 33){text("Micah",10,350);}
+        if(bG6N === 34){text("Nahum",10,350);}
+        if(bG6N === 35){text("Habakkuk",10,350);}
+        if(bG6N === 36){text("Zephaniah",10,350);}
+        if(bG6N === 37){text("Haggai",10,350);}
+        if(bG6N === 38){text("Zechariah",10,350);}
+        if(bG6N === 39){text("Malachi",10,350);}
+if(bG6N === 40){text("Matthew",10,350);}
+        if(bG6N === 41){text("Mark",10,350);}
+        if(bG6N === 42){text("Luke",10,350);}
+        if(bG6N === 43){text("John",10,350);}
+        if(bG6N === 44){text("Acts",10,350);}
+        if(bG6N === 45){text("Romans",10,350);}
+        if(bG6N === 46){text("1 Corinthians",10,350);}
+        if(bG6N === 47){text("2 Corinthians",10,350);}
+        if(bG6N === 48){text("Galatians",10,350);}
+        if(bG6N === 49){text("Ephesians",10,350);}
+        if(bG6N === 50){text("Philippians",10,350);}
+        if(bG6N === 51){text("Colossians",10,350);}
+        if(bG6N === 52){text("1 Thessalonians",10,350);}
+        if(bG6N === 53){text("2 Thessalonians",10,350);}
+        if(bG6N === 54){text("1 Timothy",10,350);}
+        if(bG6N === 55){text("2 Timothy",10,350);}
+        if(bG6N === 56){text("Titus",10,350);}
+        if(bG6N === 57){text("Philemon",10,350);}
+        if(bG6N === 58){text("Hebrews",10,350);}
+        if(bG6N === 59){text("James",10,350);}
+        if(bG6N === 60){text("1 Peter",10,350);}
+        if(bG6N === 61){text("2 Peter",10,350);}
+        if(bG6N === 62){text("1 John",10,350);}
+        if(bG6N === 63){text("2 John",10,350);}
+        if(bG6N === 64){text("3 John",10,350);}
+        if(bG6N === 65){text("Jude",10,350);}
+        if(bG6N === 66){text("Revelation",10,350);}
+    translate(-155,311);
+    //}
+    }
+    
+    if(bG6 === 2){
+    textSize(10);
+    text("?",135,39);
+    text("<",150,39);
+    if(bG6N === 0){bG6N = book;}
+    //books{
+    translate(155,-311);
+    if(bG6N === 1){text("Genesis",10,350);}
+        if(bG6N === 2){text("Exodus",10,350);}
+        if(bG6N === 3){text("Leviticus",10,350);}
+        if(bG6N === 4){text("Numbers",10,350);}
+        if(bG6N === 5){text("Deuteronomy",10,350);}
+        if(bG6N === 6){text("Joshua",10,350);}
+        if(bG6N === 7){text("Judges",10,350);}
+        if(bG6N === 8){text("Ruth",10,350);}
+        if(bG6N === 9){text("1 Samuel",10,350);}
+        if(bG6N === 10){text("2 Samuel",10,350);}
+        if(bG6N === 11){text("1 Kings",10,350);}
+        if(bG6N === 12){text("2 Kings",10,350);}
+        if(bG6N === 13){text("1 Chronicles",10,350);}
+        if(bG6N === 14){text("2 Chronicles",10,350);}
+        if(bG6N === 15){text("Ezra",10,350);}
+        if(bG6N === 16){text("Nehemiah",10,350);}
+        if(bG6N === 17){text("Esther",10,350);}
+        if(bG6N === 18){text("Job",10,350);}
+        if(bG6N === 19){text("Psalms",10,350);}
+        if(bG6N === 20){text("Proverbs",10,350);}
+        if(bG6N === 21){text("Ecclesiastes",10,350);}
+        if(bG6N === 22){text("Song of Songs",10,350);}
+        if(bG6N === 23){text("Isaiah",10,350);}
+        if(bG6N === 24){text("Jeremiah",10,350);}
+        if(bG6N === 25){text("Lamentations",10,350);}
+        if(bG6N === 26){text("Ezekiel",10,350);}
+        if(bG6N === 27){text("Daniel",10,350);}
+        if(bG6N === 28){text("Hosea",10,350);}
+        if(bG6N === 29){text("Joel",10,350);}
+        if(bG6N === 30){text("Amos",10,350);}
+        if(bG6N === 31){text("Obadiah",10,350);}
+        if(bG6N === 32){text("Jonah",10,350);}
+        if(bG6N === 33){text("Micah",10,350);}
+        if(bG6N === 34){text("Nahum",10,350);}
+        if(bG6N === 35){text("Habakkuk",10,350);}
+        if(bG6N === 36){text("Zephaniah",10,350);}
+        if(bG6N === 37){text("Haggai",10,350);}
+        if(bG6N === 38){text("Zechariah",10,350);}
+        if(bG6N === 39){text("Malachi",10,350);}
+if(bG6N === 40){text("Matthew",10,350);}
+        if(bG6N === 41){text("Mark",10,350);}
+        if(bG6N === 42){text("Luke",10,350);}
+        if(bG6N === 43){text("John",10,350);}
+        if(bG6N === 44){text("Acts",10,350);}
+        if(bG6N === 45){text("Romans",10,350);}
+        if(bG6N === 46){text("1 Corinthians",10,350);}
+        if(bG6N === 47){text("2 Corinthians",10,350);}
+        if(bG6N === 48){text("Galatians",10,350);}
+        if(bG6N === 49){text("Ephesians",10,350);}
+        if(bG6N === 50){text("Philippians",10,350);}
+        if(bG6N === 51){text("Colossians",10,350);}
+        if(bG6N === 52){text("1 Thessalonians",10,350);}
+        if(bG6N === 53){text("2 Thessalonians",10,350);}
+        if(bG6N === 54){text("1 Timothy",10,350);}
+        if(bG6N === 55){text("2 Timothy",10,350);}
+        if(bG6N === 56){text("Titus",10,350);}
+        if(bG6N === 57){text("Philemon",10,350);}
+        if(bG6N === 58){text("Hebrews",10,350);}
+        if(bG6N === 59){text("James",10,350);}
+        if(bG6N === 60){text("1 Peter",10,350);}
+        if(bG6N === 61){text("2 Peter",10,350);}
+        if(bG6N === 62){text("1 John",10,350);}
+        if(bG6N === 63){text("2 John",10,350);}
+        if(bG6N === 64){text("3 John",10,350);}
+        if(bG6N === 65){text("Jude",10,350);}
+        if(bG6N === 66){text("Revelation",10,350);}
+    translate(-155,311);
+    //}
+    }
+    
+    if(bG6 === 3){
+    //text("verse correct",100,50);
+    //WinCheckmark{
+    translate(30,tbG6W);
+        fill(0, 255, 26);
+        rect(100,100,10,10,10);
+        stroke(0, 0, 0);
+        strokeWeight(1.5);
+        line(103,105,105,108);
+        line(108,103,105,108);
+        strokeWeight(1);
+    translate(-30,-tbG6W);
+    //}
+    textSize(10);
+    fill(0, 0, 0);
+    text("=",150,39);
+    if(bG6N === 0){bG6N = rbook;}
+    
+    //books{
+    translate(155,-311);
+    if(bG6N === 1){text("Genesis",10,350);}
+        if(bG6N === 2){text("Exodus",10,350);}
+        if(bG6N === 3){text("Leviticus",10,350);}
+        if(bG6N === 4){text("Numbers",10,350);}
+        if(bG6N === 5){text("Deuteronomy",10,350);}
+        if(bG6N === 6){text("Joshua",10,350);}
+        if(bG6N === 7){text("Judges",10,350);}
+        if(bG6N === 8){text("Ruth",10,350);}
+        if(bG6N === 9){text("1 Samuel",10,350);}
+        if(bG6N === 10){text("2 Samuel",10,350);}
+        if(bG6N === 11){text("1 Kings",10,350);}
+        if(bG6N === 12){text("2 Kings",10,350);}
+        if(bG6N === 13){text("1 Chronicles",10,350);}
+        if(bG6N === 14){text("2 Chronicles",10,350);}
+        if(bG6N === 15){text("Ezra",10,350);}
+        if(bG6N === 16){text("Nehemiah",10,350);}
+        if(bG6N === 17){text("Esther",10,350);}
+        if(bG6N === 18){text("Job",10,350);}
+        if(bG6N === 19){text("Psalms",10,350);}
+        if(bG6N === 20){text("Proverbs",10,350);}
+        if(bG6N === 21){text("Ecclesiastes",10,350);}
+        if(bG6N === 22){text("Song of Songs",10,350);}
+        if(bG6N === 23){text("Isaiah",10,350);}
+        if(bG6N === 24){text("Jeremiah",10,350);}
+        if(bG6N === 25){text("Lamentations",10,350);}
+        if(bG6N === 26){text("Ezekiel",10,350);}
+        if(bG6N === 27){text("Daniel",10,350);}
+        if(bG6N === 28){text("Hosea",10,350);}
+        if(bG6N === 29){text("Joel",10,350);}
+        if(bG6N === 30){text("Amos",10,350);}
+        if(bG6N === 31){text("Obadiah",10,350);}
+        if(bG6N === 32){text("Jonah",10,350);}
+        if(bG6N === 33){text("Micah",10,350);}
+        if(bG6N === 34){text("Nahum",10,350);}
+        if(bG6N === 35){text("Habakkuk",10,350);}
+        if(bG6N === 36){text("Zephaniah",10,350);}
+        if(bG6N === 37){text("Haggai",10,350);}
+        if(bG6N === 38){text("Zechariah",10,350);}
+        if(bG6N === 39){text("Malachi",10,350);}
+if(bG6N === 40){text("Matthew",10,350);}
+        if(bG6N === 41){text("Mark",10,350);}
+        if(bG6N === 42){text("Luke",10,350);}
+        if(bG6N === 43){text("John",10,350);}
+        if(bG6N === 44){text("Acts",10,350);}
+        if(bG6N === 45){text("Romans",10,350);}
+        if(bG6N === 46){text("1 Corinthians",10,350);}
+        if(bG6N === 47){text("2 Corinthians",10,350);}
+        if(bG6N === 48){text("Galatians",10,350);}
+        if(bG6N === 49){text("Ephesians",10,350);}
+        if(bG6N === 50){text("Philippians",10,350);}
+        if(bG6N === 51){text("Colossians",10,350);}
+        if(bG6N === 52){text("1 Thessalonians",10,350);}
+        if(bG6N === 53){text("2 Thessalonians",10,350);}
+        if(bG6N === 54){text("1 Timothy",10,350);}
+        if(bG6N === 55){text("2 Timothy",10,350);}
+        if(bG6N === 56){text("Titus",10,350);}
+        if(bG6N === 57){text("Philemon",10,350);}
+        if(bG6N === 58){text("Hebrews",10,350);}
+        if(bG6N === 59){text("James",10,350);}
+        if(bG6N === 60){text("1 Peter",10,350);}
+        if(bG6N === 61){text("2 Peter",10,350);}
+        if(bG6N === 62){text("1 John",10,350);}
+        if(bG6N === 63){text("2 John",10,350);}
+        if(bG6N === 64){text("3 John",10,350);}
+        if(bG6N === 65){text("Jude",10,350);}
+        if(bG6N === 66){text("Revelation",10,350);}
+    translate(-155,311);
+    //}
+    }
+    //}
+    
+    //chapter guess 1{   
+    if(cG6 === 1){
+    fill(0, 0, 0);
+    textSize(10);
+    text("?",259,39);
+    text(">",270,39);
+    if(cG6N === 0){cG6N = chapter;}
+    text(cG6N,280,39);
+    }
+    
+    if(cG6 === 2){
+    textSize(10);
+    text("?",259,39);
+    text("<",270,39);
+    if(cG6N === 0){cG6N = chapter;}
+    text(cG6N,280,39);
+    }
+    
+    if(cG6 === 3){
+    //text("verse correct",100,50);
+    //WinCheckmark{
+    translate(155,tcG6W);
+        fill(0, 255, 26);
+        rect(100,100,10,10,10);
+        stroke(0, 0, 0);
+        strokeWeight(1.5);
+        line(103,105,105,108);
+        line(108,103,105,108);
+        strokeWeight(1);
+    translate(-155,-tcG6W);
+    //}
+    textSize(10);
+    fill(0, 0, 0);
+    text("=",270,39);
+    text(rchapter,280,39);
+    }
+    //}
+    
+    //verse guess 1{
+    if(vG6 === 1){
+    fill(0, 0, 0);
+    textSize(10);
+    text("?",309,39);
+    text(">",320,39);
+    if(vG6N === 0){vG6N = verse;}
+    text(vG6N,330,39);
+    }
+    
+    if(vG6 === 2){
+    textSize(10);
+    text("?",309,39);
+    text("<",320,39);
+    if(vG6N === 0){vG6N = verse;}
+    text(vG6N,330,39);
+    }
+    
+    if(vG6 === 3){
+    //text("verse correct",100,50);
+    //WinCheckmark{
+    translate(205,tvG6W);
+        fill(0, 255, 26);
+        rect(100,100,10,10,10);
+        stroke(0, 0, 0);
+        strokeWeight(1.5);
+        line(103,105,105,108);
+        line(108,103,105,108);
+        strokeWeight(1);
+    translate(-205,-tvG6W);
+    //}
+    textSize(10);
+    fill(0, 0, 0);
+    text("=",320,39);
+    text(rverse,330,39);
+    }
+    //}
+    //}
+    translate(0,-100);
+    
+    translate(0,120);
+    //guess 7{
+    //book guess 1{   
+    if(bG7 === 1){
+    fill(0, 0, 0);
+    textSize(10);
+    text("?",135,39);
+    text(">",150,39);
+    if(bG7N === 0){bG7N = book;}
+    //books{
+    translate(155,-311);
+    if(bG7N === 1){text("Genesis",10,350);}
+        if(bG7N === 2){text("Exodus",10,350);}
+        if(bG7N === 3){text("Leviticus",10,350);}
+        if(bG7N === 4){text("Numbers",10,350);}
+        if(bG7N === 5){text("Deuteronomy",10,350);}
+        if(bG7N === 6){text("Joshua",10,350);}
+        if(bG7N === 7){text("Judges",10,350);}
+        if(bG7N === 8){text("Ruth",10,350);}
+        if(bG7N === 9){text("1 Samuel",10,350);}
+        if(bG7N === 10){text("2 Samuel",10,350);}
+        if(bG7N === 11){text("1 Kings",10,350);}
+        if(bG7N === 12){text("2 Kings",10,350);}
+        if(bG7N === 13){text("1 Chronicles",10,350);}
+        if(bG7N === 14){text("2 Chronicles",10,350);}
+        if(bG7N === 15){text("Ezra",10,350);}
+        if(bG7N === 16){text("Nehemiah",10,350);}
+        if(bG7N === 17){text("Esther",10,350);}
+        if(bG7N === 18){text("Job",10,350);}
+        if(bG7N === 19){text("Psalms",10,350);}
+        if(bG7N === 20){text("Proverbs",10,350);}
+        if(bG7N === 21){text("Ecclesiastes",10,350);}
+        if(bG7N === 22){text("Song of Songs",10,350);}
+        if(bG7N === 23){text("Isaiah",10,350);}
+        if(bG7N === 24){text("Jeremiah",10,350);}
+        if(bG7N === 25){text("Lamentations",10,350);}
+        if(bG7N === 26){text("Ezekiel",10,350);}
+        if(bG7N === 27){text("Daniel",10,350);}
+        if(bG7N === 28){text("Hosea",10,350);}
+        if(bG7N === 29){text("Joel",10,350);}
+        if(bG7N === 30){text("Amos",10,350);}
+        if(bG7N === 31){text("Obadiah",10,350);}
+        if(bG7N === 32){text("Jonah",10,350);}
+        if(bG7N === 33){text("Micah",10,350);}
+        if(bG7N === 34){text("Nahum",10,350);}
+        if(bG7N === 35){text("Habakkuk",10,350);}
+        if(bG7N === 36){text("Zephaniah",10,350);}
+        if(bG7N === 37){text("Haggai",10,350);}
+        if(bG7N === 38){text("Zechariah",10,350);}
+        if(bG7N === 39){text("Malachi",10,350);}
+if(bG7N === 40){text("Matthew",10,350);}
+        if(bG7N === 41){text("Mark",10,350);}
+        if(bG7N === 42){text("Luke",10,350);}
+        if(bG7N === 43){text("John",10,350);}
+        if(bG7N === 44){text("Acts",10,350);}
+        if(bG7N === 45){text("Romans",10,350);}
+        if(bG7N === 46){text("1 Corinthians",10,350);}
+        if(bG7N === 47){text("2 Corinthians",10,350);}
+        if(bG7N === 48){text("Galatians",10,350);}
+        if(bG7N === 49){text("Ephesians",10,350);}
+        if(bG7N === 50){text("Philippians",10,350);}
+        if(bG7N === 51){text("Colossians",10,350);}
+        if(bG7N === 52){text("1 Thessalonians",10,350);}
+        if(bG7N === 53){text("2 Thessalonians",10,350);}
+        if(bG7N === 54){text("1 Timothy",10,350);}
+        if(bG7N === 55){text("2 Timothy",10,350);}
+        if(bG7N === 56){text("Titus",10,350);}
+        if(bG7N === 57){text("Philemon",10,350);}
+        if(bG7N === 58){text("Hebrews",10,350);}
+        if(bG7N === 59){text("James",10,350);}
+        if(bG7N === 60){text("1 Peter",10,350);}
+        if(bG7N === 61){text("2 Peter",10,350);}
+        if(bG7N === 62){text("1 John",10,350);}
+        if(bG7N === 63){text("2 John",10,350);}
+        if(bG7N === 64){text("3 John",10,350);}
+        if(bG7N === 65){text("Jude",10,350);}
+        if(bG7N === 66){text("Revelation",10,350);}
+    translate(-155,311);
+    //}
+    }
+    
+    if(bG7 === 2){
+    textSize(10);
+    text("?",135,39);
+    text("<",150,39);
+    if(bG7N === 0){bG7N = book;}
+    //books{
+    translate(155,-311);
+    if(bG7N === 1){text("Genesis",10,350);}
+        if(bG7N === 2){text("Exodus",10,350);}
+        if(bG7N === 3){text("Leviticus",10,350);}
+        if(bG7N === 4){text("Numbers",10,350);}
+        if(bG7N === 5){text("Deuteronomy",10,350);}
+        if(bG7N === 6){text("Joshua",10,350);}
+        if(bG7N === 7){text("Judges",10,350);}
+        if(bG7N === 8){text("Ruth",10,350);}
+        if(bG7N === 9){text("1 Samuel",10,350);}
+        if(bG7N === 10){text("2 Samuel",10,350);}
+        if(bG7N === 11){text("1 Kings",10,350);}
+        if(bG7N === 12){text("2 Kings",10,350);}
+        if(bG7N === 13){text("1 Chronicles",10,350);}
+        if(bG7N === 14){text("2 Chronicles",10,350);}
+        if(bG7N === 15){text("Ezra",10,350);}
+        if(bG7N === 16){text("Nehemiah",10,350);}
+        if(bG7N === 17){text("Esther",10,350);}
+        if(bG7N === 18){text("Job",10,350);}
+        if(bG7N === 19){text("Psalms",10,350);}
+        if(bG7N === 20){text("Proverbs",10,350);}
+        if(bG7N === 21){text("Ecclesiastes",10,350);}
+        if(bG7N === 22){text("Song of Songs",10,350);}
+        if(bG7N === 23){text("Isaiah",10,350);}
+        if(bG7N === 24){text("Jeremiah",10,350);}
+        if(bG7N === 25){text("Lamentations",10,350);}
+        if(bG7N === 26){text("Ezekiel",10,350);}
+        if(bG7N === 27){text("Daniel",10,350);}
+        if(bG7N === 28){text("Hosea",10,350);}
+        if(bG7N === 29){text("Joel",10,350);}
+        if(bG7N === 30){text("Amos",10,350);}
+        if(bG7N === 31){text("Obadiah",10,350);}
+        if(bG7N === 32){text("Jonah",10,350);}
+        if(bG7N === 33){text("Micah",10,350);}
+        if(bG7N === 34){text("Nahum",10,350);}
+        if(bG7N === 35){text("Habakkuk",10,350);}
+        if(bG7N === 36){text("Zephaniah",10,350);}
+        if(bG7N === 37){text("Haggai",10,350);}
+        if(bG7N === 38){text("Zechariah",10,350);}
+        if(bG7N === 39){text("Malachi",10,350);}
+if(bG7N === 40){text("Matthew",10,350);}
+        if(bG7N === 41){text("Mark",10,350);}
+        if(bG7N === 42){text("Luke",10,350);}
+        if(bG7N === 43){text("John",10,350);}
+        if(bG7N === 44){text("Acts",10,350);}
+        if(bG7N === 45){text("Romans",10,350);}
+        if(bG7N === 46){text("1 Corinthians",10,350);}
+        if(bG7N === 47){text("2 Corinthians",10,350);}
+        if(bG7N === 48){text("Galatians",10,350);}
+        if(bG7N === 49){text("Ephesians",10,350);}
+        if(bG7N === 50){text("Philippians",10,350);}
+        if(bG7N === 51){text("Colossians",10,350);}
+        if(bG7N === 52){text("1 Thessalonians",10,350);}
+        if(bG7N === 53){text("2 Thessalonians",10,350);}
+        if(bG7N === 54){text("1 Timothy",10,350);}
+        if(bG7N === 55){text("2 Timothy",10,350);}
+        if(bG7N === 56){text("Titus",10,350);}
+        if(bG7N === 57){text("Philemon",10,350);}
+        if(bG7N === 58){text("Hebrews",10,350);}
+        if(bG7N === 59){text("James",10,350);}
+        if(bG7N === 60){text("1 Peter",10,350);}
+        if(bG7N === 61){text("2 Peter",10,350);}
+        if(bG7N === 62){text("1 John",10,350);}
+        if(bG7N === 63){text("2 John",10,350);}
+        if(bG7N === 64){text("3 John",10,350);}
+        if(bG7N === 65){text("Jude",10,350);}
+        if(bG7N === 66){text("Revelation",10,350);}
+    translate(-155,311);
+    //}
+    }
+    
+    if(bG7 === 3){
+    //text("verse correct",100,50);
+    //WinCheckmark{
+    translate(30,tbG7W);
+        fill(0, 255, 26);
+        rect(100,100,10,10,10);
+        stroke(0, 0, 0);
+        strokeWeight(1.5);
+        line(103,105,105,108);
+        line(108,103,105,108);
+        strokeWeight(1);
+    translate(-30,-tbG7W);
+    //}
+    textSize(10);
+    fill(0, 0, 0);
+    text("=",150,39);
+    if(bG7N === 0){bG7N = rbook;}
+    
+    //books{
+    translate(155,-311);
+    if(bG7N === 1){text("Genesis",10,350);}
+        if(bG7N === 2){text("Exodus",10,350);}
+        if(bG7N === 3){text("Leviticus",10,350);}
+        if(bG7N === 4){text("Numbers",10,350);}
+        if(bG7N === 5){text("Deuteronomy",10,350);}
+        if(bG7N === 6){text("Joshua",10,350);}
+        if(bG7N === 7){text("Judges",10,350);}
+        if(bG7N === 8){text("Ruth",10,350);}
+        if(bG7N === 9){text("1 Samuel",10,350);}
+        if(bG7N === 10){text("2 Samuel",10,350);}
+        if(bG7N === 11){text("1 Kings",10,350);}
+        if(bG7N === 12){text("2 Kings",10,350);}
+        if(bG7N === 13){text("1 Chronicles",10,350);}
+        if(bG7N === 14){text("2 Chronicles",10,350);}
+        if(bG7N === 15){text("Ezra",10,350);}
+        if(bG7N === 16){text("Nehemiah",10,350);}
+        if(bG7N === 17){text("Esther",10,350);}
+        if(bG7N === 18){text("Job",10,350);}
+        if(bG7N === 19){text("Psalms",10,350);}
+        if(bG7N === 20){text("Proverbs",10,350);}
+        if(bG7N === 21){text("Ecclesiastes",10,350);}
+        if(bG7N === 22){text("Song of Songs",10,350);}
+        if(bG7N === 23){text("Isaiah",10,350);}
+        if(bG7N === 24){text("Jeremiah",10,350);}
+        if(bG7N === 25){text("Lamentations",10,350);}
+        if(bG7N === 26){text("Ezekiel",10,350);}
+        if(bG7N === 27){text("Daniel",10,350);}
+        if(bG7N === 28){text("Hosea",10,350);}
+        if(bG7N === 29){text("Joel",10,350);}
+        if(bG7N === 30){text("Amos",10,350);}
+        if(bG7N === 31){text("Obadiah",10,350);}
+        if(bG7N === 32){text("Jonah",10,350);}
+        if(bG7N === 33){text("Micah",10,350);}
+        if(bG7N === 34){text("Nahum",10,350);}
+        if(bG7N === 35){text("Habakkuk",10,350);}
+        if(bG7N === 36){text("Zephaniah",10,350);}
+        if(bG7N === 37){text("Haggai",10,350);}
+        if(bG7N === 38){text("Zechariah",10,350);}
+        if(bG7N === 39){text("Malachi",10,350);}
+if(bG7N === 40){text("Matthew",10,350);}
+        if(bG7N === 41){text("Mark",10,350);}
+        if(bG7N === 42){text("Luke",10,350);}
+        if(bG7N === 43){text("John",10,350);}
+        if(bG7N === 44){text("Acts",10,350);}
+        if(bG7N === 45){text("Romans",10,350);}
+        if(bG7N === 46){text("1 Corinthians",10,350);}
+        if(bG7N === 47){text("2 Corinthians",10,350);}
+        if(bG7N === 48){text("Galatians",10,350);}
+        if(bG7N === 49){text("Ephesians",10,350);}
+        if(bG7N === 50){text("Philippians",10,350);}
+        if(bG7N === 51){text("Colossians",10,350);}
+        if(bG7N === 52){text("1 Thessalonians",10,350);}
+        if(bG7N === 53){text("2 Thessalonians",10,350);}
+        if(bG7N === 54){text("1 Timothy",10,350);}
+        if(bG7N === 55){text("2 Timothy",10,350);}
+        if(bG7N === 56){text("Titus",10,350);}
+        if(bG7N === 57){text("Philemon",10,350);}
+        if(bG7N === 58){text("Hebrews",10,350);}
+        if(bG7N === 59){text("James",10,350);}
+        if(bG7N === 60){text("1 Peter",10,350);}
+        if(bG7N === 61){text("2 Peter",10,350);}
+        if(bG7N === 62){text("1 John",10,350);}
+        if(bG7N === 63){text("2 John",10,350);}
+        if(bG7N === 64){text("3 John",10,350);}
+        if(bG7N === 65){text("Jude",10,350);}
+        if(bG7N === 66){text("Revelation",10,350);}
+    translate(-155,311);
+    //}
+    }
+    //}
+    
+    //chapter guess 1{   
+    if(cG7 === 1){
+    fill(0, 0, 0);
+    textSize(10);
+    text("?",259,39);
+    text(">",270,39);
+    if(cG7N === 0){cG7N = chapter;}
+    text(cG7N,280,39);
+    }
+    
+    if(cG7 === 2){
+    textSize(10);
+    text("?",259,39);
+    text("<",270,39);
+    if(cG7N === 0){cG7N = chapter;}
+    text(cG7N,280,39);
+    }
+    
+    if(cG7 === 3){
+    //text("verse correct",100,50);
+    //WinCheckmark{
+    translate(155,tcG7W);
+        fill(0, 255, 26);
+        rect(100,100,10,10,10);
+        stroke(0, 0, 0);
+        strokeWeight(1.5);
+        line(103,105,105,108);
+        line(108,103,105,108);
+        strokeWeight(1);
+    translate(-155,-tcG7W);
+    //}
+    textSize(10);
+    fill(0, 0, 0);
+    text("=",270,39);
+    text(rchapter,280,39);
+    }
+    //}
+    
+    //verse guess 1{
+    if(vG7 === 1){
+    fill(0, 0, 0);
+    textSize(10);
+    text("?",309,39);
+    text(">",320,39);
+    if(vG7N === 0){vG7N = verse;}
+    text(vG7N,330,39);
+    }
+    
+    if(vG7 === 2){
+    textSize(10);
+    text("?",309,39);
+    text("<",320,39);
+    if(vG7N === 0){vG7N = verse;}
+    text(vG7N,330,39);
+    }
+    
+    if(vG7 === 3){
+    //text("verse correct",100,50);
+    //WinCheckmark{
+    translate(205,tvG7W);
+        fill(0, 255, 26);
+        rect(100,100,10,10,10);
+        stroke(0, 0, 0);
+        strokeWeight(1.5);
+        line(103,105,105,108);
+        line(108,103,105,108);
+        strokeWeight(1);
+    translate(-205,-tvG7W);
+    //}
+    textSize(10);
+    fill(0, 0, 0);
+    text("=",320,39);
+    text(rverse,330,39);
+    }
+    //}
+    //}
+    translate(0,-120);
+//}
+    
+    //Four main buttons and help{
+    mouseClicked = function(){
+        if(btnBook.isMouseInside()){
+            bookScreen=true;    
+        }
+        else if(btnChapter.isMouseInside()){
+            chapterScreen=true;
+        }
+        else if(btnVerse.isMouseInside()){
+            verseScreen=true;
+        }
+        else if(btnSubmit.isMouseInside()){
+        
+            if(book===0||chapter===0||verse===0){ warnActive=true; }
+            else{
+                if(guess===0 && win === false){
+                    if(verse >rverse){vG1 = 2;}
+                    else if(verse <rverse){vG1 = 1;}
+                    else if(verse === rverse){vG1 = 3;}
+                    
+                    if(chapter < rchapter){cG1 = 1;}
+                    else if(chapter > rchapter){cG1 = 2;}
+                    else if(chapter === rchapter){cG1 = 3;}
+                    
+                    if(book < rbook){bG1 = 1;}
+                    else if(book > rbook){bG1 = 2;}
+                    else if(book === rbook){bG1 = 3;}
+                    
+                    guess++;
+            }
+                else if(guess===1 && win === false){
+                    if(verse >rverse){vG2 = 2;}
+                    else if(verse <rverse){vG2 = 1;}
+                    else if(verse === rverse){vG2 = 3;}
+                    
+                    if(chapter < rchapter){cG2 = 1;}
+                    else if(chapter > rchapter){cG2 = 2;}
+                    else if(chapter === rchapter){cG2 = 3;}
+                    
+                    if(book < rbook){bG2 = 1;}
+                    else if(book > rbook){bG2 = 2;}
+                    else if(book === rbook){bG2 = 3;}
+                    
+                    guess++;
+            }
+                else if(guess===2 && win === false){
+                    if(verse >rverse){vG3 = 2;}
+                    else if(verse <rverse){vG3 = 1;}
+                    else if(verse === rverse){vG3 = 3;}
+                    
+                    if(chapter < rchapter){cG3 = 1;}
+                    else if(chapter > rchapter){cG3 = 2;}
+                    else if(chapter === rchapter){cG3 = 3;}
+                    
+                    if(book < rbook){bG3 = 1;}
+                    else if(book > rbook){bG3 = 2;}
+                    else if(book === rbook){bG3 = 3;}
+                    
+                    guess++;
+            }
+                else if(guess===3 && win === false){
+                    if(verseG >rverse){vG4 = 2;}
+                    else if(verseG <rverse){vG4 = 1;}
+                    else if(verseG === rverse){vG4 = 3;}
+                    
+                    if(chapterG < rchapter){cG4 = 1;}
+                    else if(chapterG > rchapter){cG4 = 2;}
+                    else if(chapterG === rchapter){cG4 = 3;}
+                    
+                    if(book < rbook){bG4 = 1;}
+                    else if(book > rbook){bG4 = 2;}
+                    else if(book === rbook){bG4 = 3;}
+                    
+                    guess++;
+            }
+                else if(guess===4 && win === false){
+                    if(verse >rverse){vG5 = 2;}
+                    else if(verse <rverse){vG5 = 1;}
+                    else if(verse === rverse){vG5 = 3;}
+                    
+                    if(chapter < rchapter){cG5 = 1;}
+                    else if(chapter > rchapter){cG5 = 2;}
+                    else if(chapter === rchapter){cG5 = 3;}
+                    
+                    if(book < rbook){bG5 = 1;}
+                    else if(book > rbook){bG5 = 2;}
+                    else if(book === rbook){bG5 = 3;}
+                    
+                    guess++;
+            }
+                else if(guess===5 && win === false){
+                    if(verse >rverse){vG6 = 2;}
+                    else if(verse <rverse){vG6 = 1;}
+                    else if(verse === rverse){vG6 = 3;}
+                    
+                    if(chapter < rchapter){cG6 = 1;}
+                    else if(chapter > rchapter){cG6 = 2;}
+                    else if(chapter === rchapter){cG6 = 3;}
+                    
+                    if(book < rbook){bG6 = 1;}
+                    else if(book > rbook){bG6 = 2;}
+                    else if(book === rbook){bG6 = 3;}
+                    
+                    guess++;
+            }
+                else if(guess===6 && win === false){
+                    if(verse >rverse){vG7 = 2;}
+                    else if(verse <rverse){vG7 = 1;}
+                    else if(verse === rverse){vG7 = 3;}
+                    
+                    if(chapter < rchapter){cG7 = 1;}
+                    else if(chapter > rchapter){cG7 = 2;}
+                    else if(chapter === rchapter){cG7 = 3;}
+                    
+                    if(book < rbook){bG7 = 1;}
+                    else if(book > rbook){bG7 = 2;}
+                    else if(book === rbook){bG7 = 3;}
+                    
+                    guess++;
+            }
+                if(rverse===verse&&rchapter===chapter&&
+rbook===book){win=true;}
+                else if(guess === 7 && win === false){lose = true;}
+        
+            }        
+        }
+        else if(btnHelp.isMouseInside()){
+            helpScreen=true;
+            
+        }
+    };
+    //}
+    
+    //BookNames{
+    fill(0, 0, 0);
+    textSize(25);
+        //Empty{ 
+        if(book === 0){text("Pick a book",10,350);}
+        //}
+        //Old Testament{
+        if(book === 1){text("Genesis",10,350);}
+        if(book === 2){text("Exodus",10,350);}
+        if(book === 3){text("Leviticus",10,350);}
+        if(book === 4){text("Numbers",10,350);}
+        if(book === 5){text("Deuteronomy",10,350);}
+        if(book === 6){text("Joshua",10,350);}
+        if(book === 7){text("Judges",10,350);}
+        if(book === 8){text("Ruth",10,350);}
+        if(book === 9){text("1 Samuel",10,350);}
+        if(book === 10){text("2 Samuel",10,350);}
+        if(book === 11){text("1 Kings",10,350);}
+        if(book === 12){text("2 Kings",10,350);}
+        if(book === 13){text("1 Chronicles",10,350);}
+        if(book === 14){text("2 Chronicles",10,350);}
+        if(book === 15){text("Ezra",10,350);}
+        if(book === 16){text("Nehemiah",10,350);}
+        if(book === 17){text("Esther",10,350);}
+        if(book === 18){text("Job",10,350);}
+        if(book === 19){text("Psalms",10,350);}
+        if(book === 20){text("Proverbs",10,350);}
+        if(book === 21){text("Ecclesiastes",10,350);}
+        if(book === 22){text("Song of Songs",10,350);}
+        if(book === 23){text("Isaiah",10,350);}
+        if(book === 24){text("Jeremiah",10,350);}
+        if(book === 25){text("Lamentations",10,350);}
+        if(book === 26){text("Ezekiel",10,350);}
+        if(book === 27){text("Daniel",10,350);}
+        if(book === 28){text("Hosea",10,350);}
+        if(book === 29){text("Joel",10,350);}
+        if(book === 30){text("Amos",10,350);}
+        if(book === 31){text("Obadiah",10,350);}
+        if(book === 32){text("Jonah",10,350);}
+        if(book === 33){text("Micah",10,350);}
+        if(book === 34){text("Nahum",10,350);}
+        if(book === 35){text("Habakkuk",10,350);}
+        if(book === 36){text("Zephaniah",10,350);}
+        if(book === 37){text("Haggai",10,350);}
+        if(book === 38){text("Zechariah",10,350);}
+        if(book === 39){text("Malachi",10,350);}
+        //}
+        //New Testament{
+        if(book === 40){text("Matthew",10,350);}
+        if(book === 41){text("Mark",10,350);}
+        if(book === 42){text("Luke",10,350);}
+        if(book === 43){text("John",10,350);}
+        if(book === 44){text("Acts",10,350);}
+        if(book === 45){text("Romans",10,350);}
+        if(book === 46){text("1 Corinthians",10,350);}
+        if(book === 47){text("2 Corinthians",10,350);}
+        if(book === 48){text("Galatians",10,350);}
+        if(book === 49){text("Ephesians",10,350);}
+        if(book === 50){text("Philippians",10,350);}
+        if(book === 51){text("Colossians",10,350);}
+        if(book === 52){text("1 Thessalonians",10,350);}
+        if(book === 53){text("2 Thessalonians",10,350);}
+        if(book === 54){text("1 Timothy",10,350);}
+        if(book === 55){text("2 Timothy",10,350);}
+        if(book === 56){text("Titus",10,350);}
+        if(book === 57){text("Philemon",10,350);}
+        if(book === 58){text("Hebrews",10,350);}
+        if(book === 59){text("James",10,350);}
+        if(book === 60){text("1 Peter",10,350);}
+        if(book === 61){text("2 Peter",10,350);}
+        if(book === 62){text("1 John",10,350);}
+        if(book === 63){text("2 John",10,350);}
+        if(book === 64){text("3 John",10,350);}
+        if(book === 65){text("Jude",10,350);}
+        if(book === 66){text("Revelation",10,350);}
+        //}
+        
+    //}
+    
+    //Bottom text{
+    text(chapterG,200,350);
+    text(":",250,350);
+    text(verseG,260,350);
+    text("Submit",315,350);
+    //}
+    
+    //VerseText{
+    textSize(15);
+    if(ref===1){
+        text("In the beginning God created the heavens and the earth.", 10 ,200);
+        rbook=1;rchapter=1;rverse=1;
+    }
+    if(ref===2){
+        text("For I am not ashamed of the gospel, because it is the \npower of God that brings salvation to everyone who \nbelieves: first to the Jew, then to the Gentile.",10,200);
+        rbook = 45; rchapter = 1; rverse =16;
+    }
+    if(ref===3){
+        text("For the wages of sin is death, but the gift of God is eternal \nlife in Christ Jesus our Lord.",10,200);
+        rbook = 45; rchapter = 6; rverse =22;
+    }
+    if(ref===4){
+        text("Salvation is found in no one else, for there is no other name under heaven given to mankind by which we must be saved",10,200,390,200);
+        rbook = 44; rchapter = 4; rverse =12;
+    }
+    if(ref===5){
+        text("Above all, my brothers and sisters, do not swear—not by heaven or by earth or by anything else. All you need to say is a simple “Yes” or “No.” Otherwise you will be condemned.",10,200,373,200);
+        rbook = 59; rchapter = 5; rverse =12;
+    }
+    if(ref===6){
+        text("The thief comes only to steal and kill and destroy; I have come that they may have life, and have it to the full.",10,200,383,300);
+        rbook = 43; rchapter = 10; rverse =10;
+    }
+    if(ref===7){
+        text("For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future.",10,200,383,300);
+        rbook = 24; rchapter = 29; rverse =11;
+    }
+    if(ref===8){
+        text("I only know that in every city the Holy Spirit warns me that prison and hardships are facing me.",10,200,383,300);
+        rbook = 44; rchapter = 20; rverse =23;
+    }
+    if(ref===9){
+        text("However, I consider my life worth nothing to me; my only aim is to finish the race and complete the task the Lord Jesus has given me—the task of testifying to the good news of God’s grace.",10,191,383,300);
+        rbook = 44; rchapter = 20; rverse =24;
+    }
+/*    if(ref===10){
+        text("For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.",10,200,383,300);
+        rbook = 43; rchapter = 3; rverse =16;
+    }
+*/
+
+
+    if(ref===10){
+    text("Repent, then, and turn to God, so that your sins may be wiped out, that times of refreshing may come from the Lord,",10,200,383,300);
+    rbook = 44; rchapter = 3; rverse =19;
+    }
+    //ref=13;
+    //text(ref,10,10);
+    var x=0;
+    for(var i=11; i<arrayMaster.length+11;i++){
+                if(ref===i){
+                    text(arrayMaster[x][3],10,200,383,300);
+                    rbook=arrayMaster[x][0];
+                    rchapter = arrayMaster[x][1];
+                    rverse = arrayMaster[x][2];
+                }
+                else{x++;}
+    }
+    //}
+    //text(arrayMaster.length,100,100);
+    
+    //Warning{
+    textSize(15);
+    if(warnActive===true){   
+        if(warnTime<200){
+            fill(166, 141, 184);
+            rect(10,256,313,46,20);
+            fill(0, 0, 0);
+text("You can't submit an answer without giving",20,277);
+text("a book a chapter and a verse",69,290);
+
+            warnTime++;
+        }
+        else if(warnTime===200){warnActive=false;warnTime=0;}
+        }
+   // text(warnTime,100,100);
+    //text(warnActive,100,122);
+    //}
+    
+    //Functions for the book button{
+    if(bookScreen===true){
+        //Big box{
+        fill(255, 255, 255);
+        rect(25,25,350,350);
+        //}
+        
+        //All the squares for book names{
+        rect(50,35,100,15);
+        rect(50,50,100,15);
+        rect(50,65,100,15);
+        rect(50,65+15,100,15);
+        rect(50,65+15*2,100,15);
+        rect(50,65+15*3,100,15);
+        rect(50,65+15*4,100,15);
+        rect(50,65+15*5,100,15);
+        rect(50,65+15*6,100,15);
+        rect(50,65+15*7,100,15);
+        rect(50,65+15*8,100,15);
+        rect(50,65+15*9,100,15);
+        rect(50,65+15*10,100,15);
+        rect(50,65+15*11,100,15);
+        rect(50,65+15*12,100,15);
+        rect(50,65+15*13,100,15);
+        rect(50,65+15*14,100,15);
+        rect(50,65+15*15,100,15);
+        rect(50,65+15*16,100,15);
+        rect(50,65+15*17,100,15);
+        rect(50,65+15*18,100,15);
+        rect(50,65+15*19,100,15);
+        rect(150,35,100,15);
+        rect(150,35+15*1,100,15);
+        rect(150,35+15*2,100,15);
+        rect(150,35+15*3,100,15);
+        rect(150,35+15*4,100,15);
+        rect(150,35+15*5,100,15);
+        rect(150,35+15*6,100,15);
+        rect(150,35+15*7,100,15);
+        rect(150,35+15*8,100,15);rect(150,35+15*9,100,15);
+        rect(150,35+15*10,100,15);rect(150,35+15*11,100,15);
+        rect(150,35+15*12,100,15);rect(150,35+15*12,100,15);rect(150,35+15*13,100,15);
+        rect(150,35+15*14,100,15);rect(150,35+15*15,100,15);rect(150,35+15*16,100,15);
+        rect(150,35+15*17,100,15);rect(150,35+15*18,100,15);rect(150,35+15*19,100,15);
+        rect(150,35+15*20,100,15);rect(150,35+15*21,100,15);
+        rect(250,35*1,100,15);rect(250,35+15*1,100,15);rect(250,35+15*2,100,15);                    rect(250,35+15*3,100,15);rect(250,35+15*4,100,15);rect(250,35+15*5,100,15);
+        rect(250,35+15*6,100,15);rect(250,35+15*7,100,15);rect(250,35+15*8,100,15);
+        rect(250,35+15*9,100,15);rect(250,35+15*10,100,15);rect(250,35+15*11,100,15);
+        rect(250,35+15*12,100,15);rect(250,35+15*13,100,15);rect(250,35+15*14,100,15);
+        rect(250,35+15*15,100,15);rect(250,35+15*16,100,15);rect(250,35+15*17,100,15);
+        rect(250,35+15*18,100,15);rect(250,35+15*19,100,15);rect(250,35+15*20,100,15);
+        rect(250,35+15*21,100,15);
+        //}        
+        
+        //All the book names in the squares{
+        fill(0, 0, 0);
+        text("Genesis",50,50); 
+        text("Exodus",50,50+15);
+        text("Leviticus",50,50+15*2);
+        text("Numbers",50,50+15*3);
+        text("Deuteronomy",50,50+15*4);
+        text("Joshua",50,50+15*5);
+        text("Judges",50,50+15*6);
+        text("Ruth",50,50+15*7);
+        text("1 Samuel",50,50+15*8);
+        text("2 Samuel",50,50+15*9);
+        text("1 Kings",50,50+15*10);
+        text("2 Kings",50,50+15*11);
+        text("1 Chronicles",50,50+15*12);
+        text("2 Chronicles",50,50+15*13);
+        text("Ezra",50,50+15*14);
+        text("Nehemiah",50,50+15*15);
+        text("Esther",50,50+15*16);
+        text("Job",50,50+15*17);
+        text("Psalms",50,50+15*18);
+        text("Proverbs",50,50+15*19);
+        text("Ecclesiastes",50,50+15*20);
+        text("Song of Songs",50,50+15*21);
+        text("Isaiah",150,50*1);
+        text("Jeremiah",150,50+15*1);
+        text("Lamentations",150,50+15*2);
+        text("Ezekiel",150,50+15*3);
+        text("Daniel",150,50+15*4);
+        text("Hosea",150,50+15*5);
+        text("Joel",150,50+15*6);
+        text("Amos",150,50+15*7);
+        text("Obadiah",150,50+15*8);
+        text("Jonah",150,50+15*9);
+        text("Micah",150,50+15*10);
+        text("Nahum",150,50+15*11);
+        text("Habakkuk",150,50+15*12);
+        text("Zephaniah",150,50+15*13);
+        text("Haggai",150,50+15*14);
+        text("Malachi",150,50+15*16);
+        text("Zechariah",150,50+15*15);
+        text("Matthew",150,50+15*17);
+        text("Mark",150,50+15*18);
+        text("Luke",150,50+15*19);
+        text("John",150,50+15*20);
+        text("Acts",150,50+15*21);
+        text("Romans",250,50);
+        text("1 Corinthians",250,50+15*1);
+        text("2 Corinthians",250,50+15*2);
+        text("Galatians",250,50+15*3);
+        text("Ephesians",250,50+15*4);
+        text("Philippians",250,50+15*5);
+        text("Colossians",250,50+15*6);
+        textSize(12.5);
+        text("1 Thessalonians",250,50+15*7);
+        text("2 Thessalonians",250,50+15*8);
+        textSize(15);
+        text("1 Timothy",250,50+15*9);
+        text("2 Timothy",250,50+15*10);
+        text("Titus",250,50+15*11);
+        text("Philemon",250,50+15*12);
+        text("Hebrews",250,50+15*13);
+        text("James",250,50+15*14);
+        text("1 Peter",250,50+15*15);
+        text("2 Peter",250,50+15*16);
+        text("1 John",250,50+15*17);
+        text("2 John",250,50+15*18);
+        text("3 John",250,50+15*19);
+        text("Jude",250,50+15*20);
+        text("Revelation",250,50+15*21);
+        //}
+        
+        //Function for picking the book + exiting the square{
+    mouseClicked = function(){
+        if(btnb1.isMouseInside()){book=1;bookScreen=false;}
+        if(btnb2.isMouseInside()){book=2;bookScreen=false;}
+        if(btnb3.isMouseInside()){book=3;bookScreen=false;}
+        if(btnb4.isMouseInside()){book=4;bookScreen=false;}
+        if(btnb5.isMouseInside()){book=5;bookScreen=false;}
+        if(btnb6.isMouseInside()){book=6;bookScreen=false;}
+        if(btnb7.isMouseInside()){book=7;bookScreen=false;}
+        if(btnb8.isMouseInside()){book=8;bookScreen=false;}
+        if(btnb9.isMouseInside()){book=9;bookScreen=false;}
+        if(btnb10.isMouseInside()){book=10;bookScreen=false;}
+        if(btnb11.isMouseInside()){book=11;bookScreen=false;}
+        if(btnb12.isMouseInside()){book=12;bookScreen=false;}
+        if(btnb13.isMouseInside()){book=13;bookScreen=false;}
+        if(btnb14.isMouseInside()){book=14;bookScreen=false;}
+        if(btnb15.isMouseInside()){book=15;bookScreen=false;}
+        if(btnb16.isMouseInside()){book=16;bookScreen=false;}
+        if(btnb17.isMouseInside()){book=17;bookScreen=false;}
+        if(btnb18.isMouseInside()){book=18;bookScreen=false;}
+        if(btnb19.isMouseInside()){book=19;bookScreen=false;}
+        if(btnb20.isMouseInside()){book=20;bookScreen=false;}
+        if(btnb21.isMouseInside()){book=21;bookScreen=false;}
+        if(btnb22.isMouseInside()){book=22;bookScreen=false;}
+        if(btnb23.isMouseInside()){book=23;bookScreen=false;}
+        if(btnb24.isMouseInside()){book=24;bookScreen=false;}
+        if(btnb25.isMouseInside()){book=25;bookScreen=false;}
+        if(btnb26.isMouseInside()){book=26;bookScreen=false;}
+        if(btnb27.isMouseInside()){book=27;bookScreen=false;}
+        if(btnb28.isMouseInside()){book=28;bookScreen=false;}
+        if(btnb29.isMouseInside()){book=29;bookScreen=false;}
+        if(btnb30.isMouseInside()){book=30;bookScreen=false;}
+        if(btnb31.isMouseInside()){book=31;bookScreen=false;}
+        if(btnb32.isMouseInside()){book=32;bookScreen=false;}
+        if(btnb33.isMouseInside()){book=33;bookScreen=false;}
+        if(btnb34.isMouseInside()){book=34;bookScreen=false;}
+        if(btnb35.isMouseInside()){book=35;bookScreen=false;}
+        if(btnb36.isMouseInside()){book=36;bookScreen=false;}
+        if(btnb37.isMouseInside()){book=37;bookScreen=false;}
+        if(btnb38.isMouseInside()){book=38;bookScreen=false;}
+        if(btnb39.isMouseInside()){book=39;bookScreen=false;}
+        if(btnb40.isMouseInside()){book=40;bookScreen=false;}
+        if(btnb41.isMouseInside()){book=41;bookScreen=false;}
+        if(btnb42.isMouseInside()){book=42;bookScreen=false;}
+        if(btnb43.isMouseInside()){book=43;bookScreen=false;}
+        if(btnb44.isMouseInside()){book=44;bookScreen=false;}
+        if(btnb45.isMouseInside()){book=45;bookScreen=false;}
+        if(btnb46.isMouseInside()){book=46;bookScreen=false;}
+        if(btnb47.isMouseInside()){book=47;bookScreen=false;}
+        if(btnb48.isMouseInside()){book=48;bookScreen=false;}
+        if(btnb49.isMouseInside()){book=49;bookScreen=false;}
+        if(btnb50.isMouseInside()){book=50;bookScreen=false;}
+        if(btnb51.isMouseInside()){book=51;bookScreen=false;}
+        if(btnb52.isMouseInside()){book=52;bookScreen=false;}
+        if(btnb53.isMouseInside()){book=53;bookScreen=false;}
+        if(btnb54.isMouseInside()){book=54;bookScreen=false;}
+        if(btnb55.isMouseInside()){book=55;bookScreen=false;}
+        if(btnb56.isMouseInside()){book=56;bookScreen=false;}
+        if(btnb57.isMouseInside()){book=57;bookScreen=false;}
+        if(btnb58.isMouseInside()){book=58;bookScreen=false;}
+        if(btnb59.isMouseInside()){book=59;bookScreen=false;}
+        if(btnb60.isMouseInside()){book=60;bookScreen=false;}
+        if(btnb61.isMouseInside()){book=61;bookScreen=false;}
+        if(btnb62.isMouseInside()){book=62;bookScreen=false;}
+        if(btnb63.isMouseInside()){book=63;bookScreen=false;}
+        if(btnb64.isMouseInside()){book=64;bookScreen=false;}
+        if(btnb65.isMouseInside()){book=65;bookScreen=false;}
+        if(btnb66.isMouseInside()){book=66;bookScreen=false;}
+        else{bookScreen=false;}
+        //}
+
+    };
+    }
+    //}
+    
+    //Functions for the chapter button{
+    if(chapterScreen===true){
+        fill(255, 255, 255);
+        
+        rect(25,25,350,350);
+        rect(175,0,50,20);
+        
+        rect(75,30,75,75);
+        rect(162.5,30,75,75);
+        rect(250,30,75,75);
+        
+        rect(75,117.5,75,75);
+        rect(162.5,117.5,75,75);
+        rect(250,117.5,75,75);
+        
+        rect(75,205,75,75);
+        rect(162.5,205,75,75);
+        rect(250,205,75,75);
+        
+        rect(75,292.5,75,75);
+        rect(162.5,292.5,75,75);
+        rect(250,292.5,75,75);
+        
+        textSize(50);
+        fill(0, 0, 0);
+        text("1",99,85);
+        text("2",188,85);
+        text("3",273,85);
+        text("4",99,173);
+        text("5",188,173);
+        text("6",273,173);
+        text("7",99,261);
+        text("8",188,261);
+        text("9",273,261);
+        text("0",188,349);
+        textSize(50);
+        text("#",273,349);
+        textSize(25);
+        text("Clear",82,339);
+        text(chapter,177.5,20);
+        
+        
+        
+    mouseClicked = function(){
+      //keypadKeys1-9{
+      if(chapterOpened === true){chapterNumPlace=1;chapter=0;chapterG=0;chapterOpened=false;}
+        if(key1.isMouseInside()){
+            if(chapterNumPlace === 1){chapter=1; chapterNumPlace++;}
+            else if(chapterNumPlace === 2){
+                chapter= chapter*10 + 1; chapterNumPlace++;
+            }
+            else if(chapterNumPlace === 3){
+                chapter = chapter*10 + 1; chapterNumPlace++;
+            }
+        }
+        else if(key2.isMouseInside()){
+            if(chapterNumPlace === 1){chapter=2; chapterNumPlace++;}
+            else if(chapterNumPlace === 2){
+                chapter= chapter*10 + 2; chapterNumPlace++;
+            }
+            else if(chapterNumPlace === 3){
+                chapter = chapter*10 + 2; chapterNumPlace++;
+            }
+        }
+        else if(key3.isMouseInside()){
+            if(chapterNumPlace === 1){chapter=3; chapterNumPlace++;}
+            else if(chapterNumPlace === 2){
+                chapter= chapter*10 + 3; chapterNumPlace++;
+            }
+            else if(chapterNumPlace === 3){
+                chapter = chapter*10 + 3; chapterNumPlace++;
+            }
+        }
+        else if(key4.isMouseInside()){
+            if(chapterNumPlace === 1){chapter=4; chapterNumPlace++;}
+            else if(chapterNumPlace === 2){
+                chapter= chapter*10 + 4; chapterNumPlace++;
+            }
+            else if(chapterNumPlace === 3){
+                chapter = chapter*10 + 4; chapterNumPlace++;
+            }
+        }
+        else if(key5.isMouseInside()){
+            if(chapterNumPlace === 1){chapter=5; chapterNumPlace++;}
+            else if(chapterNumPlace === 2){
+                chapter= chapter*10 + 5; chapterNumPlace++;
+            }
+            else if(chapterNumPlace === 3){
+                chapter = chapter*10 + 5; chapterNumPlace++;
+            }
+        }
+        else if(key6.isMouseInside()){
+            if(chapterNumPlace === 1){chapter=6; chapterNumPlace++;}
+            else if(chapterNumPlace === 2){
+                chapter= chapter*10 + 6; chapterNumPlace++;
+            }
+            else if(chapterNumPlace === 3){
+                chapter = chapter*10 + 3*2; chapterNumPlace++;
+            }
+        }
+        else if(key7.isMouseInside()){
+            if(chapterNumPlace === 1){chapter=7; chapterNumPlace++;}
+            else if(chapterNumPlace === 2){
+                chapter= chapter*10 + 7; chapterNumPlace++;
+            }
+            else if(chapterNumPlace === 3){
+                chapter = chapter*10 + 7; chapterNumPlace++;
+            }
+        }
+        else if(key8.isMouseInside()){
+            if(chapterNumPlace === 1){chapter=8; chapterNumPlace++;}
+            else if(chapterNumPlace === 2){
+                chapter= chapter*10 + 8; chapterNumPlace++;
+            }
+            else if(chapterNumPlace === 3){
+                chapter = chapter*10 + 8; chapterNumPlace++;
+            }
+        }
+        else if(key9.isMouseInside()){
+        if(chapterNumPlace === 1){chapter=3*3; chapterNumPlace++;}
+            else if(chapterNumPlace === 2){
+                chapter= chapter*10 + 3*3; chapterNumPlace++;
+            }
+            else if(chapterNumPlace === 3){
+                chapter = chapter*10 + 3*3; chapterNumPlace++;
+            }
+        }
+        //}
+        else if(key10.isMouseInside()){chapter = 0; chapterNumPlace = 1;}
+        else if(key11.isMouseInside()){
+            if(chapterNumPlace === 2){
+                chapter= chapter*10 + 0; chapterNumPlace++;
+            }
+            else if(chapterNumPlace === 3){
+                chapter = chapter*10 + 0; chapterNumPlace++;
+            }
+        }
+        else if(key12.isMouseInside()){chapterScreen=false; chapterG=chapter;chapterOpened =true;}
+        else if(btnChapterScreen.isMouseInside()){}
+        else{chapterScreen=false; chapterG=chapter; chapterOpened = true;}
+        //else{chapterScreen=false;}
+    };
+    }
+    //}
+    
+    //Functions for the verse button{
+    if(verseScreen===true){
+        fill(255, 255, 255);
+        
+        rect(25,25,350,350);
+        rect(175,0,50,20);
+        
+        rect(75,30,75,75);
+        rect(162.5,30,75,75);
+        rect(250,30,75,75);
+        
+        rect(75,117.5,75,75);
+        rect(162.5,117.5,75,75);
+        rect(250,117.5,75,75);
+        
+        rect(75,205,75,75);
+        rect(162.5,205,75,75);
+        rect(250,205,75,75);
+        
+        rect(75,292.5,75,75);
+        rect(162.5,292.5,75,75);
+        rect(250,292.5,75,75);
+        
+        textSize(50);
+        fill(0, 0, 0);
+        text("1",99,85);
+        text("2",188,85);
+        text("3",273,85);
+        text("4",99,173);
+        text("5",188,173);
+        text("6",273,173);
+        text("7",99,261);
+        text("8",188,261);
+        text("9",273,261);
+        text("0",188,349);
+        textSize(50);
+        text("#",273,349);
+        textSize(25);
+        text("Clear",82,339);
+        text(verse,177.5,20);
+        
+    mouseClicked = function(){
+    if(verseOpened===true){verse=0; verseG=0; verseNumPlace=1; verseOpened=false;}
+        if(key1.isMouseInside()){
+            if(verseNumPlace === 1){verse=1; verseNumPlace++;}
+            else if(verseNumPlace === 2){
+                verse= verse*10 + 1; verseNumPlace++;
+            }
+            else if(verseNumPlace === 3){
+                verse = verse*10 + 1; verseNumPlace++;
+            }
+        }
+        else if(key2.isMouseInside()){
+            if(verseNumPlace === 1){verse=2; verseNumPlace++;}
+            else if(verseNumPlace === 2){
+                verse= verse*10 + 2; verseNumPlace++;
+            }
+            else if(verseNumPlace === 3){
+                verse = verse*10 + 2; verseNumPlace++;
+            }
+        }
+        else if(key3.isMouseInside()){
+            if(verseNumPlace === 1){verse=3; verseNumPlace++;}
+            else if(verseNumPlace === 2){
+                verse= verse*10 + 3; verseNumPlace++;
+            }
+            else if(verseNumPlace === 3){
+                verse = verse*10 + 3; verseNumPlace++;
+            }
+        }
+        else if(key4.isMouseInside()){
+            if(verseNumPlace === 1){verse=4; verseNumPlace++;}
+            else if(verseNumPlace === 2){
+                verse= verse*10 + 4; verseNumPlace++;
+            }
+            else if(verseNumPlace === 3){
+                verse = verse*10 + 4; verseNumPlace++;
+            }
+        }
+        else if(key5.isMouseInside()){
+            if(verseNumPlace === 1){verse=5; verseNumPlace++;}
+            else if(verseNumPlace === 2){
+                verse= verse*10 + 5; verseNumPlace++;
+            }
+            else if(verseNumPlace === 3){
+                verse = verse*10 + 5; verseNumPlace++;
+            }
+        }
+        else if(key6.isMouseInside()){
+            if(verseNumPlace === 1){verse=6; verseNumPlace++;}
+            else if(verseNumPlace === 2){
+                verse= verse*10 + 6; verseNumPlace++;
+            }
+            else if(verseNumPlace === 3){
+                verse = verse*10 + 3*2; verseNumPlace++;
+            }
+        }
+        else if(key7.isMouseInside()){
+            if(verseNumPlace === 1){verse=7; verseNumPlace++;}
+            else if(verseNumPlace === 2){
+                verse= verse*10 + 7; verseNumPlace++;
+            }
+            else if(verseNumPlace === 3){
+                verse = verse*10 + 7; verseNumPlace++;
+            }
+        }
+        else if(key8.isMouseInside()){
+            if(verseNumPlace === 1){verse=8; verseNumPlace++;}
+            else if(verseNumPlace === 2){
+                verse= verse*10 + 8; verseNumPlace++;
+            }
+            else if(verseNumPlace === 3){
+                verse = verse*10 + 8; verseNumPlace++;
+            }
+        }
+        else if(key9.isMouseInside()){
+            if(verseNumPlace === 1){verse=3*3; verseNumPlace++;}
+            else if(verseNumPlace === 2){
+                verse= verse*10 + 3*3; verseNumPlace++;
+            }
+            else if(verseNumPlace === 3){
+                verse = verse*10 + 3*3; verseNumPlace++;
+            }
+        }
+        else if(key10.isMouseInside()){verse = 0; verseNumPlace = 1;}
+        else if(key11.isMouseInside()){
+            if(verseNumPlace === 2){
+                verse= verse*10 + 0; verseNumPlace++;
+            }
+            else if(verseNumPlace === 3){
+                verse = verse*10 + 0; verseNumPlace++;
+            }
+        }
+        else if(key12.isMouseInside()){verseScreen=false; verseG=verse; verseOpened=true;}
+        else if(btnVerseScreen.isMouseInside()){}
+        else{verseScreen=false; verseG=verse; verseOpened=true;}
+    };
+    }
+    //}
+    
+    //Win screen&&Lose screen{
+    if(win===true){
+        if(winTime<100){winTime++;}
+        else{
+        background(0, 157, 255);
+        fill(0, 0, 0);
+        textSize(75);
+        text("YOU WIN!",25,215);
+        textSize(25);
+        text("YOU GOT IT IN",100,300);
+        text(guess,285,300);
+        fill(130, 203, 255);
+        rect(115,318,165,50,100);
+        fill(0, 0, 0);
+        text("PLAY AGAIN",125,350);
+        mouseClicked=function(){
+            if(btnPlayAgain.isMouseInside()){
+               
+               //AllVarsReset{
+                //These vars are for guessing{
+book = 0;
+chapter =0;
+verse = 0;
+
+//these two are to actualy make use of the pound sign
+chapterG=0;
+verseG=0;
+//}
+
+//The r is for real while the ones without r will be the guess{
+rbook = 0;
+rchapter =0;
+rverse = 0;
+//}
+ref =random(1,10+arrayMaster.length + 0.9); ref =floor(ref);
+//var ref = 0;
+//Placeholders vars for the keypads{
+chapterNumPlace = 1;
+verseNumPlace = 1;
+//}
+
+//Vars if you win! {
+win=false;
+winTime = 0;
+//}
+lose = false;
+loseTime = 0;
+//Vars if you lose :({
+
+//}
+//Vars for if you make a really bad guess{
+    warnTime = 0;
+    warnActive = false;
+//}
+//These are to reset screens if you clicked on them when win/lose time was going up
+bookScreen = false;
+verseScreen = false;
+chapterScreen = false;
+helpScreen = false;
+
+//Vars for info when you guess{
+    guess = 0;
+    
+    //guess 1 vars{ 
+     vG1 = 0;
+     vG1N = 0;
+     tvG1W = -70;
+
+     cG1 = 0;
+     cG1N = 0;
+     tcG1W = -70;
+    
+     bG1 = 0;
+     bG1N = 0;
+     tbG1W = -70;
+    //}
+    
+    //guess 2 vars{
+     vG2 = 0;
+     vG2N = 0;
+    tvG2W = -70;
+
+     cG2 = 0;
+     cG2N = 0;
+     tcG2W = -70;
+    
+     bG2 = 0;
+     bG2N = 0;
+     tbG2W = -70;
+    //}
+    
+    //guess 3 vars{
+     vG3 = 0;
+     vG3N = 0;
+     tvG3W = -70;
+
+     cG3 = 0;
+     cG3N = 0;
+     tcG3W = -70;
+    
+     bG3 = 0;
+     bG3N = 0;
+     tbG3W = -70;
+    //}
+    
+    //guess 4 vars{
+     vG4 = 0;
+     vG4N = 0;
+    
+     cG4 = 0;
+     cG4N = 0;
+    
+     bG4 = 0;
+     bG4N = 0;
+    //}
+    
+    //guess 5 vars{
+     vG5 = 0;
+     vG5N = 0;
+     tvG5W = -70;
+    
+     cG5 = 0;
+     cG5N = 0;
+     tcG5W = -70;
+    
+     bG5 = 0;
+    bG5N = 0;
+     tbG5W = -70;
+    //}
+    
+    //guess 6 vars{
+     vG6 = 0;
+     vG6N = 0;
+     tvG6W = -70;
+    
+     cG6 = 0;
+     cG6N = 0;
+     tcG6W = -70;
+    
+     bG6 = 0;
+     bG6N = 0;
+     tbG6W = -70;
+    //}
+    
+    //guess 7 vars{
+     vG7 = 0;
+     vG7N = 0;
+     tvG7W = -70;
+    
+     cG7 = 0;
+    cG7N = 0;
+    tcG7W = -70;
+    
+     bG7 = 0;
+     bG7N = 0;
+    tbG7W = -70;
+    //}
+//}
+            //}
+            }
+        };
+        }
+    } 
+    if(lose===true){
+        if(loseTime<100){loseTime++;}
+        else{
+        background(116, 144, 161);
+        fill(88, 121, 135);
+        rect(5,315,190,50);
+        rect(197.5,315,50,50);
+        rect(257.5,315,50,50);
+        fill(0, 0, 0);
+        textSize(75);
+        text("YOU LOST!",2,100);
+        textSize(20);
+        text("THE ANSWER WAS",100,300);
+        text(rchapter,200,350);
+        text(":",250,350);
+        text(rverse,260,350);
+         //Old Testament{
+        if(rbook === 1){text("Genesis",10,350);}
+        if(rbook === 2){text("Exodus",10,350);}
+        if(rbook === 3){text("Leviticus",10,350);}
+        if(rbook === 4){text("Numbers",10,350);}
+        if(rbook === 5){text("Deuteronomy",10,350);}
+        if(rbook === 6){text("Joshua",10,350);}
+        if(rbook === 7){text("Judges",10,350);}
+        if(rbook === 8){text("Ruth",10,350);}
+        if(rbook === 9){text("1 Samuel",10,350);}
+        if(rbook === 10){text("2 Samuel",10,350);}
+        if(rbook === 11){text("1 Kings",10,350);}
+        if(rbook === 12){text("2 Kings",10,350);}
+        if(rbook === 13){text("1 Chronicles",10,350);}
+        if(rbook === 14){text("2 Chronicles",10,350);}
+        if(rbook === 15){text("Ezra",10,350);}
+        if(rbook === 16){text("Nehemiah",10,350);}
+        if(rbook === 17){text("Esther",10,350);}
+        if(rbook === 18){text("Job",10,350);}
+        if(rbook === 19){text("Psalms",10,350);}
+        if(rbook === 20){text("Proverbs",10,350);}
+        if(rbook === 21){text("Ecclesiastes",10,350);}
+        if(rbook === 22){text("Song of Songs",10,350);}
+        if(rbook === 23){text("Isaiah",10,350);}
+        if(rbook === 24){text("Jeremiah",10,350);}
+        if(rbook === 25){text("Lamentations",10,350);}
+        if(rbook === 26){text("Ezekiel",10,350);}
+        if(rbook === 27){text("Daniel",10,350);}
+        if(rbook === 28){text("Hosea",10,350);}
+        if(rbook === 29){text("Joel",10,350);}
+        if(rbook === 30){text("Amos",10,350);}
+        if(rbook === 31){text("Obadiah",10,350);}
+        if(rbook === 32){text("Jonah",10,350);}
+        if(rbook === 33){text("Micah",10,350);}
+        if(rbook === 34){text("Nahum",10,350);}
+        if(rbook === 35){text("Habakkuk",10,350);}
+        if(rbook === 36){text("Zephaniah",10,350);}
+        if(rbook === 37){text("Haggai",10,350);}
+        if(rbook === 38){text("Zechariah",10,350);}
+        if(rbook === 39){text("Malachi",10,350);}
+        //}
+        //New Testament{
+        if(rbook === 40){text("Matthew",10,350);}
+        if(rbook === 41){text("Mark",10,350);}
+        if(rbook === 42){text("Luke",10,350);}
+        if(rbook === 43){text("John",10,350);}
+        if(rbook === 44){text("Acts",10,350);}
+        if(rbook === 45){text("Romans",10,350);}
+        if(rbook === 46){text("1 Corinthians",10,350);}
+        if(rbook === 47){text("2 Corinthians",10,350);}
+        if(rbook === 48){text("Galatians",10,350);}
+        if(rbook === 49){text("Ephesians",10,350);}
+        if(rbook === 50){text("Philippians",10,350);}
+        if(rbook === 51){text("Colossians",10,350);}
+        if(rbook === 52){text("1 Thessalonians",10,350);}
+        if(rbook === 53){text("2 Thessalonians",10,350);}
+        if(rbook === 54){text("1 Timothy",10,350);}
+        if(rbook === 55){text("2 Timothy",10,350);}
+        if(rbook === 56){text("Titus",10,350);}
+        if(rbook === 57){text("Philemon",10,350);}
+        if(rbook === 58){text("Hebrews",10,350);}
+        if(rbook === 59){text("James",10,350);}
+        if(rbook === 60){text("1 Peter",10,350);}
+        if(rbook === 61){text("2 Peter",10,350);}
+        if(rbook === 62){text("1 John",10,350);}
+        if(rbook === 63){text("2 John",10,350);}
+        if(rbook === 64){text("3 John",10,350);}
+        if(rbook === 65){text("Jude",10,350);}
+        if(rbook === 66){text("Revelation",10,350);}
+        //}
+        fill(102, 140, 166);
+        rect(115,200,165,50,100);
+        fill(0, 0, 0);
+        text("TRY AGAIN",142,233);
+        mouseClicked=function(){
+            if(btnTryAgain.isMouseInside()){
+               //AllVarsReset{
+                //These vars are for guessing{
+book = 0;
+chapter =0;
+verse = 0;
+
+//These are to reset screens if you clicked on them when win/lose time was going up
+ bookScreen = false;
+ verseScreen = false;
+ chapterScreen = false;
+ helpScreen = false;
+
+//these two are to actualy make use of the pound sign
+chapterG=0;
+verseG=0;
+//}
+
+//The r is for real while the ones without r will be the guess{
+rbook = 0;
+rchapter =0;
+rverse = 0;
+//}
+ref =random(1,10+arrayMaster.length + 0.9); ref =floor(ref);
+//var ref = 0;
+//Placeholders vars for the keypads{
+chapterNumPlace = 1;
+verseNumPlace = 1;
+//}
+
+//Vars if you win! {
+win=false;
+winTime = 0;
+//}
+lose = false;
+loseTime = 0;
+//Vars if you lose :({
+
+//}
+//Vars for if you make a really bad guess{
+    warnTime = 0;
+    warnActive = false;
+//}
+//Vars for info when you guess{
+    guess = 0;
+    
+    //guess 1 vars{ 
+     vG1 = 0;
+     vG1N = 0;
+     tvG1W = -70;
+
+     cG1 = 0;
+     cG1N = 0;
+     tcG1W = -70;
+    
+     bG1 = 0;
+     bG1N = 0;
+     tbG1W = -70;
+    //}
+    
+    //guess 2 vars{
+     vG2 = 0;
+     vG2N = 0;
+    tvG2W = -70;
+
+     cG2 = 0;
+     cG2N = 0;
+     tcG2W = -70;
+    
+     bG2 = 0;
+     bG2N = 0;
+     tbG2W = -70;
+    //}
+    
+    //guess 3 vars{
+     vG3 = 0;
+     vG3N = 0;
+     tvG3W = -70;
+
+     cG3 = 0;
+     cG3N = 0;
+     tcG3W = -70;
+    
+     bG3 = 0;
+     bG3N = 0;
+     tbG3W = -70;
+    //}
+    
+    //guess 4 vars{
+     vG4 = 0;
+     vG4N = 0;
+    
+     cG4 = 0;
+     cG4N = 0;
+    
+     bG4 = 0;
+     bG4N = 0;
+    //}
+    
+    //guess 5 vars{
+     vG5 = 0;
+     vG5N = 0;
+     tvG5W = -70;
+    
+     cG5 = 0;
+     cG5N = 0;
+     tcG5W = -70;
+    
+     bG5 = 0;
+    bG5N = 0;
+     tbG5W = -70;
+    //}
+    
+    //guess 6 vars{
+     vG6 = 0;
+     vG6N = 0;
+     tvG6W = -70;
+    
+     cG6 = 0;
+     cG6N = 0;
+     tcG6W = -70;
+    
+     bG6 = 0;
+     bG6N = 0;
+     tbG6W = -70;
+    //}
+    
+    //guess 7 vars{
+     vG7 = 0;
+     vG7N = 0;
+     tvG7W = -70;
+    
+     cG7 = 0;
+    cG7N = 0;
+    tcG7W = -70;
+    
+     bG7 = 0;
+     bG7N = 0;
+    tbG7W = -70;
+    //}
+//}
+            //}
+            }
+        };
+        
+        
+        }
+    }
+    
+    //}
+    //Help Screen{
+        if(helpScreen===true){
+            background(0, 28, 128);
+            fill(48, 91, 191);
+            ellipse(50,50,65,65);
+            fill(255, 255, 255);
+            ellipse(50,50,50,50);
+            fill(191, 189, 191);
+            ellipse(62,56,15,15);
+            ellipse(46,44,5,7);
+            ellipse(53,67,11,5);
+            fill(20, 135, 0);
+            ellipse(300,337,269,100);
+            fill(38, 252, 41);
+            bezier(0,432,-149,433,50,165,503,405);
+            //Stars{
+            fill(255, 255, 255);
+        translate(50,0);
+                text("*",10,100);
+                text("*",10,82);
+                text("*",10,116);
+                text("*",10,65);
+                text("*",10,137);
+                text("*",38,100);
+                text("*",26,100);
+                text("*",58,100);
+                text("*",58,117);
+                text("*",58,84);
+                fill(0, 0, 0);
+                fill(255, 255, 255);
+                text("*",58,65);
+                text("*",58,137);
+                text("*",93,66);
+                text("*",93,100);
+                text("*",93,138);
+                text("*",112,66);
+                text("*",112,100);
+                text("*",114,138);
+                text("*",130,66);
+                text("*",128,100);
+                text("*",129,138);
+                text("*",93,81);
+                text("*",93,118);
+                text("*",165,100);
+                text("*",165,64);
+                text("*",165,79);
+                text("*",165,119);
+                text("*",165,141);
+                text("*",181,141);
+                text("*",201,141);
+                text("*",230,100);
+                text("*",230,80);
+                text("*",230,64);
+                text("*",230,119);
+                text("*",230,144);
+                text("*",250,64);
+                text("*",273,64);
+                text("*",273,83);
+                text("*",273,102);
+                text("*",253,102);
+        translate(-50,0);
+            //}
+            fill(0, 0, 0);
+            text("BACK",31,56);
+            fill(0, 191, 255);
+            text("BACK",32,55);
+            fill(150, 58, 0);
+            rect(195,300,10,100);
+            strokeWeight(5);
+            stroke(156, 61, 2);
+            fill(255, 178, 89);
+            rect(35,150,330,220,20);
+            strokeWeight(1);
+            stroke(0, 0, 0);
+            fill(0, 0, 0);
+            textSize(13);
+            text("Hello! If you've come here that must mean you need help! Your objective of the game is to guess the correct book, chapter and verse of the Bible! Click on the pick a book square in the main game to pick the book you think it is and then the chapter button to the right and then the verse button and on the far right is the submit button click on that when you are ready to see if you got it right! If you got it all right you win! Otherwise you will get information for your next guess like if the chapter is less than or greater than the chapter you guessed! Ready? Click on the Moon to get back into the game!",40,165,328,200);
+            textSize(15);
+            mouseClicked =function(){
+                if(btnHelp.isMouseInside()){
+                    helpScreen=false;
+                }
+            };
+        }
+    //}
+    //Debug{
+    var debug =false;
+    if(debug===true){
+    text(book,10,19);
+    text(rbook,10,39);
+    text(chapter,30,20);
+    text(rchapter,30,40);
+    text(chapterG,30,60);
+    text(verse,50,20);
+    text(rverse,50,40);
+    text(verseG,50,60);
+    text(ref,10,200);
+    text(rbook+"+"+rchapter+"+"+rverse,42,119);
+    
+    }
+    //}
+};
+
+    }};
+
+  // Get the canvas that ProcessingJS will use
+  var canvas = document.getElementById("mycanvas"); 
+  // Pass the function to ProcessingJS constructor
+  var processingInstance = new Processing(canvas, programCode); 
+  </script>
 </html>
