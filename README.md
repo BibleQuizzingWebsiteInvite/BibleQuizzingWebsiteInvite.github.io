@@ -1,2 +1,2 @@
-# BibleQuizzingWebsiteInvite.github.io
+# Biblele.github.io
 invite
